@@ -1,0 +1,4 @@
+<script lang="ts">import { notes } from '#lib/content.ts';</script>
+<div class="page-intro"><p class="eyebrow">FIELD NOTES / RELIABILITY & DATA</p><h1>Engineering notes.</h1><p>How systems fail, what the evidence says, and where the uncertainty remains.</p></div>
+<div class="notes-index">{#each notes as note}<article class="note-index-row"><span class="row-number">{note.number}</span><div><p class="eyebrow">{note.category}</p><h2><a href={`/notes/${note.slug}/`}>{note.title}</a></h2><p>{note.summary}</p><a class="text-link" href={`/notes/${note.slug}/`}>Read note <span aria-hidden="true">↗</span></a></div></article>{/each}</div>
+<p class="editorial-note">Original summaries based on reviewed engineering documentation. Each note separates implementation, verification and remaining limitations.</p>

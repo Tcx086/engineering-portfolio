@@ -1,0 +1,49 @@
+TOM CHEN
+Backend, Data & Market Systems Engineering
+tom863631@gmail.com | https://github.com/Tcx086
+https://portfolio.tcx086.com
+
+PROFILE
+Building reliable data infrastructure, backend services, and AI-integrated systems.
+Independent market-data research and engineering, plus collaborative part-time
+contract backend development.
+
+CORE TECHNOLOGIES
+Python, TypeScript, SQL, FastAPI, PostgreSQL, SQLAlchemy, Alembic, REST APIs,
+WebSocket, Parquet, DuckDB, Linux, Git/GitHub, Cloudflare Workers and D1.
+
+ENGINEERING EXPERIENCE
+Lomidance | Part-time contract engineering
+Backend services, database models, REST API contracts, external AI generation
+API integration, validation, tests and collaborative development workflows.
+Commercial code and architecture remain confidential.
+
+INDEPENDENT PROJECTS
+Microstructure Discovery Factory
+Multi-exchange Level-2 and trade acquisition, durable persistence, provenance,
+causal replay, recovery, reconciliation and operational failure investigation.
+Python, TypeScript, WebSocket, Parquet, DuckDB and Linux. Private repository.
+
+Situation Monitor / Market Context Engine
+News and macroeconomic context, structured processing, source provenance,
+temporal guards and as-of research. Cloudflare Workers/D1, Python and TypeScript.
+Public site: https://news-monitor.tcx086.com/
+
+Quantitative Portfolio Optimization
+Independent research scope: Markowitz, Black-Litterman, Risk Parity, CVaR,
+Monte Carlo, scenario analysis and robustness. No audited returns or alpha claim.
+
+OTHER PROFESSIONAL EXPERIENCE
+CCC Motors | Part-time Sales Associate | June 2024 - March 2026
+Customer transactions, financing documentation, operational coordination and
+structured Excel tracking.
+
+Hull Chrysler | Part-time Sales Associate | October 2023 - June 2024
+Financing workflows, transaction processing and record accuracy.
+
+EDUCATION
+University of Toronto | Bachelor of Commerce | April 2025
+
+INTERESTS
+Backend/Python development, data engineering, market data, trading systems,
+quantitative development, AI integration and automation engineering.
