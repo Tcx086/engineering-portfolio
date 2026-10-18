@@ -4,6 +4,7 @@ build/
 .env*
 .dev.vars*
 .wrangler/
+.vercel/
 test-results/
 playwright-report/
 .local/

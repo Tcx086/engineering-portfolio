@@ -30,15 +30,18 @@ The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG
 - `csr = false`: visitors receive complete HTML; no client JavaScript is loaded.
 - Typed content in `src/lib/content.ts`; shared layout and original SVG diagrams.
 - No database, authentication, third-party fonts, analytics or runtime API calls.
-- Cloudflare Pages serves static files. `_headers` supplies security headers; `404.html` provides a real static error page.
+- Vercel serves the static `build/` output; Cloudflare manages the portfolio subdomain's DNS. `vercel.json` supplies security headers and static hosting settings; `404.html` provides a real static error page. `_headers` retains equivalent Cloudflare-compatible headers.
 - Sitemap, robots, canonical URLs and Open Graph metadata are included. The original `static/og.svg` and its raster export `static/og.png` are checked in together.
 
 ## Deployment and previews
 
-Use a **new, isolated** Cloudflare Pages project named `tom-chen-engineering-portfolio` connected only to `Tcx086/engineering-portfolio`:
+The isolated Vercel project `tom-chen-engineering-portfolio` connects only to `Tcx086/engineering-portfolio`. The owner authorized Vercel as a fallback after a documented Cloudflare blocker.
+
+Cloudflare Pages project creation with Git integration failed on October 18, 2026 with **8000011**: an internal issue with the account's Pages Git installation. No Pages project was created. The existing Wrangler sign-in was also expired and could not refresh non-interactively. Shared Git installations, existing projects and production applications were left untouched.
 
 | Setting | Value |
 | --- | --- |
+| Framework preset | Other (`framework: null`; SvelteKit static adapter) |
 | Production branch | `main` |
 | Build command | `npm run check && npm run build && npm test` |
 | Output directory | `build` |
@@ -46,9 +49,9 @@ Use a **new, isolated** Cloudflare Pages project named `tom-chen-engineering-por
 | Preview branches | All non-production branches |
 | Custom domain | `portfolio.tcx086.com` |
 
-Create a branch and push it to get an isolated Pages preview. Validate the preview before merging into `main`. Pages handles the Git-based build and deploy; a separate deployment token or GitHub Actions deployment workflow is unnecessary.
+Create a branch and push it to get an isolated Vercel preview. Validate the preview before merging into `main`. Vercel handles the Git-based build and deploy; the GitHub Actions workflow separately runs verification. No deployment secrets are stored in the repository.
 
-Before first custom-domain setup, verify a successful isolated preview, add the new domain to this Pages project, and create only the new `portfolio` CNAME pointing at the project's returned `pages.dev` hostname. If that name already exists, stop and inspect it. Never replace the root domain or alter another application's DNS, routes, bindings or secrets.
+Before first custom-domain setup, verify a successful isolated preview, add the new domain to this project, and create only the new `portfolio` CNAME in Cloudflare using Vercel's returned DNS target. If that name already exists, stop and inspect it. Never replace the root domain or alter another application's DNS, routes, bindings or secrets. Retain the DNS-only record so Vercel can validate ownership and issue TLS.
 
 ## Content maintenance
 
