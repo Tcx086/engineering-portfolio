@@ -1,5 +1,4 @@
 """Generate the public TXT/PDF from the same facts used by the HTML resume."""
-from functools import partial
 from hashlib import sha256
 from html import escape
 import json
@@ -10,7 +9,6 @@ from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle
-from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -62,8 +60,8 @@ section("HOBBY")
 paragraph(resume["hobby"])
 lines.extend(["EDUCATION", resume["education"]["school"], resume["education"]["credential"], "", "HOBBY", resume["hobby"], ""])
 txt_path.write_text("\n".join(lines), encoding="utf-8")
-document = SimpleDocTemplate(str(pdf_path), pagesize=letter, leftMargin=36, rightMargin=36, topMargin=30, bottomMargin=30, title="Tom Chen - Engineering Resume", author="Tom Chen")
-document.build(story, canvasmaker=partial(Canvas, invariant=1))
+document = SimpleDocTemplate(str(pdf_path), pagesize=letter, leftMargin=36, rightMargin=36, topMargin=30, bottomMargin=30, title="Tom Chen - Engineering Resume", author="Tom Chen", invariant=1)
+document.build(story)
 
 reader = PdfReader(pdf_path)
 assert len(reader.pages) == 1, "Public resume must fit on one page"
