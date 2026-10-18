@@ -1,3 +1,19 @@
-<script lang="ts">import { site } from '#lib/content.ts';</script>
-<div class="page-intro resume-intro"><p class="eyebrow">PUBLIC RESUME</p><h1>Tom Chen</h1><p>Backend, Data & Market Systems Engineering</p><div class="hero-actions"><a class="button" href="/tom-chen-resume.txt" download>Download resume <span class="file-type">TXT ↓</span></a><a class="text-link" href="/contact/">Contact details <span aria-hidden="true">↗</span></a></div></div>
-<div class="resume-layout"><aside><p class="eyebrow">CONTACT</p><a href={`mailto:${site.email}`}>{site.email}</a><a href={site.github}>github.com/Tcx086</a><p class="eyebrow mt-10">CORE TECHNOLOGIES</p><p>Python · TypeScript · SQL<br />FastAPI · PostgreSQL<br />SQLAlchemy · Alembic<br />WebSocket · Parquet · DuckDB<br />Linux · Git / GitHub<br />Cloudflare Workers · D1</p></aside><div class="article-body"><section><h2>Profile</h2><p>{site.description} Independent research and engineering work in market data infrastructure, plus collaborative part-time contract work on backend services and AI API integration.</p></section><section><h2>Engineering experience</h2><h3>Lomidance</h3><p class="muted">Part-time contract engineering</p><p>Backend services, database models, REST API contracts, external AI generation API integration, validation, tests and shared development workflows. Commercial implementation details remain confidential.</p></section><section><h2>Selected independent projects</h2><h3>Microstructure Discovery Factory</h3><p>Multi-exchange Level-2 and trade acquisition, durable persistence, provenance, causal replay, recovery and reconciliation. Python, TypeScript, WebSocket, Parquet, DuckDB and Linux.</p><h3>Situation Monitor / Market Context Engine</h3><p>News and macroeconomic context, structured processing, source provenance, temporal guards and as-of selection. Cloudflare Workers, D1, Python and TypeScript.</p><h3>Quantitative Portfolio Optimization</h3><p>Independent research scope covering Markowitz, Black-Litterman, Risk Parity, CVaR, Monte Carlo and robustness evaluation. No audited returns or production alpha claim.</p></section><section><h2>Other professional experience</h2><h3>CCC Motors · Part-time Sales Associate</h3><p>June 2024 – March 2026<br />Customer transactions, financing documentation, operational coordination and structured Excel tracking.</p><h3>Hull Chrysler · Part-time Sales Associate</h3><p>October 2023 – June 2024<br />Financing workflows, transaction processing and record accuracy.</p></section><section><h2>Education</h2><p><strong>University of Toronto</strong><br />Bachelor of Commerce · April 2025</p></section></div></div>
+<script lang="ts">
+  import resume from '#lib/resume.json';
+</script>
+
+<div class="page-intro resume-intro">
+  <p class="eyebrow">Public engineering resume</p><h1>{resume.name}</h1><p>{resume.headline}</p>
+  <div class="hero-actions"><a class="button" href="/tom-chen-resume.pdf" download>Download resume <span class="file-type">PDF ↓</span></a><a class="text-link" href="/tom-chen-resume.txt" download>Plain text version <span aria-hidden="true">↓</span></a></div>
+</div>
+<div class="resume-layout">
+  <aside><p class="eyebrow">Contact</p><a href={`mailto:${resume.email}`}>{resume.email}</a><a href={resume.github}>github.com/Tcx086</a><a href={resume.website}>portfolio.tcx086.com</a><p class="eyebrow mt-10">Technical skills</p>{#each resume.skills as skill}<p>{skill}</p>{/each}</aside>
+  <div class="article-body resume-body">
+    <section><h2>Profile</h2><p>{resume.profile}</p></section>
+    <section><h2>Engineering experience</h2>{#each resume.experience as item}<h3>{item.name}</h3><p class="resume-role">{item.role}<br />{item.dates}</p><ul>{#each item.bullets as bullet}<li>{bullet}</li>{/each}</ul>{/each}</section>
+    <section><h2>Independent projects</h2>{#each resume.projects as item}<h3>{item.name}</h3><p class="resume-role">{item.role}<br />{item.dates}</p><ul>{#each item.bullets as bullet}<li>{bullet}</li>{/each}</ul>{/each}</section>
+    <section><h2>Volunteer experience</h2><h3>{resume.volunteer.name}</h3><p class="resume-role">{resume.volunteer.role}<br />{resume.volunteer.dates}</p><ul>{#each resume.volunteer.bullets as bullet}<li>{bullet}</li>{/each}</ul></section>
+    <section><h2>Education</h2><p><strong>{resume.education.school}</strong><br />{resume.education.credential}</p></section>
+    <section><h2>HOBBY</h2><p>{resume.hobby}</p></section>
+  </div>
+</div>

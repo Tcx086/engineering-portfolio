@@ -1,7 +1,7 @@
 export const site = {
   name: 'Tom Chen',
   title: 'Backend, Data & Market Systems Engineering',
-  description: 'Building reliable data infrastructure, backend services, and AI-integrated systems.',
+  description: 'Tom Chen builds backend services, market data pipelines and AI integrations with Python, TypeScript and SQL.',
   url: 'https://portfolio.tcx086.com',
   email: 'tom863631@gmail.com',
   github: 'https://github.com/Tcx086'
@@ -11,119 +11,134 @@ export type Section = { title: string; paragraphs: string[]; points?: string[] }
 export type Project = {
   slug: string; number: string; name: string; category: string; summary: string;
   tags: string[]; role: string; diagram?: 'capture' | 'context';
-  sections: Section[]; link?: { label: string; href: string };
+  sections: Section[]; result: string; tools: string; technical: Section[];
+  limitations: string; link?: { label: string; href: string };
 };
+
+export const captureMetrics = [
+  { value: '12/12', label: 'capture lanes completed' },
+  { value: '653,722', label: 'order-book (L2) updates' },
+  { value: '4,339,527', label: 'trades recorded' },
+  { value: '~68%', label: 'displayed BTC/ETH depth contraction' }
+];
 
 export const projects: Project[] = [
   {
     slug: 'microstructure-discovery-factory', number: '01', name: 'Microstructure Discovery Factory',
-    category: 'Independent research & engineering',
-    summary: 'A market data platform built around a harder question: can the captured data actually be trusted for research?',
-    role: 'Independent project · Market data acquisition, persistence, validation and replay',
+    category: 'Independent project',
+    summary: 'I built a system that collects live cryptocurrency market data from multiple exchanges, stores it for analysis and checks it for gaps and errors.',
+    role: 'Independent Researcher | Market Data & Systems · August 2026 - Present',
     tags: ['Python', 'TypeScript', 'WebSocket', 'Parquet', 'DuckDB', 'Linux'], diagram: 'capture',
     sections: [
-      { title: 'The engineering problem', paragraphs: [
-        'A live socket is only the beginning of a useful dataset. Exchange streams can disconnect, order books can lose continuity, and a process can report success before all of its data reaches durable storage.',
-        'Microstructure Discovery Factory is an independent research and engineering platform for acquiring multi-exchange market data and preserving the evidence needed to evaluate it. The work spans Level-2 order books, trades, persistence, recovery and research replay.'
+      { title: 'Why I built it', paragraphs: ['I wanted to study how markets behave during busy events. That requires a detailed record of trades and orders, along with a way to tell whether anything was missed. A price chart alone cannot answer those questions.'] },
+      { title: 'What I implemented', paragraphs: [], points: [
+        'Collectors that receive exchange updates and trades over WebSocket connections.',
+        'A storage pipeline that saves the data for later analysis and checks what reached disk.',
+        'Validation and replay tools to investigate missing updates, recover from interruptions and repeat research.',
+        'Monitoring and lifecycle work for a dedicated Alienware Linux collector, separating collection from research workloads.'
       ] },
-      { title: 'From acquisition to research', paragraphs: [
-        'Venue-specific acquisition handles stream semantics before data enters a shared persistence and validation path. Order-book trust is tracked separately from connection state. After a disconnect, recovery requires a fresh snapshot and a valid continuation of updates.',
-        'Durable spooling and Parquet persistence separate receipt from confirmed storage. Validation and reconciliation check the resulting artifacts before research consumes them. Python and DuckDB support inspection and replay without making the research process another factual writer.'
-      ], points: ['Preserve source identity and acquisition provenance.', 'Distinguish event time, receipt and durable availability.', 'Retain interruptions and recovery boundaries in replay.', 'Monitor source progress, queues, persistence and terminal outcomes separately.'] },
-      { title: 'Evidence from one FOMC capture', paragraphs: [
-        'The documented event capture covered 12 of 12 capture lanes, with 653,722 Level-2 updates and 4,339,527 trades. Event analysis observed approximately 68% contraction in displayed BTC/ETH depth.',
-        'These figures describe that specific event capture. They are not an uptime claim, a statement about every dataset, or evidence that subsequent 24-hour collection campaigns passed. Displayed depth is an order-book observation, not executed liquidity or a trading return.'
+      { title: 'What the system does', paragraphs: ['The collector records trades and changes to the order book, the list of displayed buy and sell orders. It processes those updates, stores them and checks the resulting dataset before research uses it. Replay lets me revisit an event with the information that was available at the time.'] }
+    ],
+    result: 'During one documented Federal Reserve policy event (FOMC), the collector recorded the data below. I used it to study how much displayed Bitcoin and Ether buy and sell interest fell around the announcement, and how it recovered.',
+    tools: 'TypeScript handles live collection. Python, Parquet and DuckDB support storage checks and analysis. Linux provides a dedicated environment for running the collector.',
+    technical: [
+      { title: 'Keeping storage and recovery in sync', paragraphs: [
+        'The pipeline separates receiving an update from confirming that it has reached durable storage. A spool retains pending data; landing and reconciliation check the stored artifacts before research consumes them.',
+        'Source identity and exchange, receipt and availability timestamps travel with the data. Research readers use those time boundaries to avoid including information before it was available.'
       ] },
-      { title: 'Failure analysis shaped the design', paragraphs: [
-        'A burst investigation reproduced event-loop starvation in a queue that repeatedly removed the first element of an array. The remediation used ring storage and bounded cooperative draining, preserving FIFO order and existing persistence semantics.',
-        'A separate source-continuity contract invalidates order-book trust immediately on disconnection. Reconnection creates a new recovery cycle; a socket opening by itself does not restore data completeness. Operational checks also look for stalled book progress and premature termination.'
+      { title: 'Handling disconnects and busy periods', paragraphs: [
+        'A reopened connection does not repair a missing order-book interval. The continuity path invalidates book trust on disconnect and starts a fresh snapshot/recovery cycle. Replay retains the interruption.',
+        'A separate burst investigation reproduced event-loop starvation in a queue that repeatedly removed the first array element. I replaced that behavior with ring storage and bounded cooperative draining while preserving FIFO order and persistence behavior. Focused regression checks covered the reproduced queue failure.'
       ] },
-      { title: 'Verification and boundaries', paragraphs: [
-        'Reviewed evidence includes implementation documentation, focused queue regression reports and source-continuity contracts. Focused verification supports those specific behaviors; it does not certify the entire platform or an arbitrary collection run.',
-        'The source repository and market datasets are private. This case study publishes a high-level engineering account and approved event figures. Source code, raw market data, operational topology and deployment details are withheld.'
+      { title: 'Running collection on dedicated Linux hardware', paragraphs: [
+        'The Alienware Linux collector is a practical step from a research workstation toward dedicated collection hardware. The lifecycle work gives acquisition, storage and validation workers a common service owner.',
+        'Shutdown stops new inputs before storage workers are torn down. A forced stop retains failure evidence and pending state for explicit recovery. The engineering note explains the implementation checks and the separate physical-host acceptance requirements.'
       ] }
-    ]
+    ],
+    limitations: 'The figures describe one event capture, not every collection campaign or a general uptime result. The repository and raw market data remain private. Linux lifecycle software checks and physical-host acceptance are separate pieces of evidence.'
   },
   {
-    slug: 'market-context-engine', number: '02', name: 'Situation Monitor',
-    category: 'Independent research & product',
-    summary: 'Market and macroeconomic context with source provenance, temporal guards and explicit uncertainty.',
-    role: 'Independent project · Backend integrations, structured processing and data integrity',
-    tags: ['TypeScript', 'Python', 'Cloudflare Workers', 'D1', 'SvelteKit'], diagram: 'context',
-    link: { label: 'Visit Situation Monitor', href: 'https://news-monitor.tcx086.com/' },
+    slug: 'market-context-engine', number: '02', name: 'Situation Monitor', category: 'Independent product & research',
+    summary: 'I built a dashboard that organizes financial news, economic events and market information so they can be reviewed together.',
+    role: 'Independent Product & Research Project · 2025 - Present',
+    tags: ['TypeScript', 'Python', 'SvelteKit', 'Cloudflare Workers', 'D1'], diagram: 'context',
+    link: { label: 'Open Situation Monitor', href: 'https://news-monitor.tcx086.com/' },
     sections: [
-      { title: 'Context needs a time boundary', paragraphs: [
-        'Situation Monitor is the frontend of Market Context Engine, an independent project that brings together news, macroeconomic information and market context. Its engineering challenge is to keep a useful explanation attached to its sources and to what was knowable at a particular time.',
-        'A headline publication time is not necessarily the time the system received or persisted it. Historical research must not silently import information that became available later.'
+      { title: 'Why I built it', paragraphs: ['Financial news and economic releases arrive from different sources and at different times. I wanted a place to organize that information, trace it back to its source and review what was known before or after an event.'] },
+      { title: 'What I implemented', paragraphs: [], points: [
+        'Source collection and API integrations for news, macroeconomic information and market data.',
+        'Structured extraction and validation to turn incoming information into records the system can compare and inspect.',
+        'A SvelteKit dashboard backed by Cloudflare Workers and D1 event history.',
+        'Historical lookups that distinguish when information was published from when the system actually received and saved it.'
       ] },
-      { title: 'Processing and persistence', paragraphs: [
-        'The SvelteKit frontend presents market context. Cloudflare Workers integrate external APIs and selected news sources, while D1 supports trusted event history. Normalization, validation and source provenance sit between acquisition and interpretation.',
-        'The documented research path separates source publication, first receipt and durable snapshot availability. As-of selection requires the appropriate receipt. Immutable snapshots and explicit evidence identities make later inspection and replay possible.'
-      ], points: ['Validate event identities and leave incomplete matches unresolved.', 'Freeze pre-event evidence instead of rewriting expectations after release.', 'Keep observed facts separate from heuristic narrative interpretation.', 'Make stale, missing and partial source coverage visible.'] },
-      { title: 'Verification evidence', paragraphs: [
-        'Reviewed architecture and verification reports describe checks for delayed commits, restart persistence, immutable snapshots, historical as-of boundaries and read-only retrieval. The important property is that a later receipt cannot make a snapshot appear available in an earlier historical query.',
-        'These are focused, documented checks. This portfolio does not present them as comprehensive production certification. Historical record counts and a previously cited parity-suite total are omitted because their dated scope was not established in the reviewed material.'
-      ] },
-      { title: 'What the product does not establish', paragraphs: [
-        'Coverage depends on the selected sources and provider availability. Some interpretation uses rules and uncalibrated weights; it is not a calibrated forecast. A successful API response does not prove every displayed panel is live or that all event families have complete evidence.',
-        'The public dashboard is available below. This case study makes no claim of institutional use, trading performance or a completed integration with the separate market-data research platform.'
+      { title: 'What the system does', paragraphs: ['Situation Monitor is the public interface of Market Context Engine. Incoming news and event information is organized into source-linked context. Historical inspection lets me ask what information was available at an earlier moment without silently adding later updates.'] }
+    ],
+    result: 'The public dashboard is available to explore. Documented checks cover saved event history surviving a restart or redeployment, consistent historical selection and read-only inspection. These checks make the product useful as both a market-context tool and a data-engineering project.',
+    tools: 'SvelteKit and TypeScript present the dashboard. Cloudflare Workers handle provider requests, D1 stores trusted event history, and Python supports research and validation workflows.',
+    technical: [
+      { title: 'Turning incoming information into useful records', paragraphs: ['Collection, structured extraction and validation are separate stages. Records retain source identity, while checks handle incomplete fields, duplicate information and inconsistent event identities. Missing or stale source coverage stays visible.'] },
+      { title: 'Keeping historical views consistent', paragraphs: [
+        'Source publication, first receipt and durable availability are different timestamps. An as-of query uses availability evidence so a late discovery cannot appear in a snapshot from before the system received it.',
+        'The documented checks include delayed commits, restart persistence, immutable snapshots and historical boundaries. Pre-event expectations are frozen separately from later results and revisions.'
       ] }
-    ]
+    ],
+    limitations: 'Coverage depends on source availability. Some market interpretation uses rules and uncalibrated weights, so it should be read as context rather than a forecast. Historical dataset and test-suite totals are omitted until their dated scope can be established.'
   },
   {
-    slug: 'lomidance', number: '03', name: 'Lomidance',
-    category: 'Part-time contract engineering',
-    summary: 'Collaborative backend engineering for an AI-integrated product, with explicit API contracts and validation.',
-    role: 'Part-time contract contributor · Collaborative commercial work',
+    slug: 'lomidance', number: '03', name: 'Lomidance', category: 'Contract part-time',
+    summary: 'I contribute backend services, database models and AI service integrations to a shared product for generative video workflows.',
+    role: 'Backend & Data Engineer | Contract Part-time · May 2026 - Present',
     tags: ['Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Alembic', 'REST APIs'],
     sections: [
-      { title: 'A collaborative engineering role', paragraphs: [
-        'Lomidance is part-time contract engineering work on a collaborative product. My contribution focuses on backend services, database models, API contracts and external AI generation API integration.',
-        'The work belongs in a different category from my independent research projects: interfaces and changes must fit a shared codebase and respect collaborator ownership.'
+      { title: 'The product and my role', paragraphs: ['Lomidance is a collaborative AI product. I work as a Backend & Data Engineer under a part-time contract arrangement, contributing to a shared codebase with other product and engineering collaborators.'] },
+      { title: 'What I contribute', paragraphs: [], points: [
+        'Python and FastAPI backend services and REST API contracts.',
+        'PostgreSQL models, application data flows and migrations using SQLAlchemy and Alembic.',
+        'Integration with external AI generation services, including input validation and failure handling.',
+        'Focused tests, backend/frontend coordination and shared Git/GitHub development and deployment workflows.'
       ] },
-      { title: 'Contribution areas', paragraphs: [
-        'The approved technology summary includes Python, FastAPI, PostgreSQL, SQLAlchemy and Alembic. Work covers REST API behavior, model and schema changes, integration validation, tests, Git collaboration and deployment workflows.',
-        'External generation APIs create a boundary between a product request and a provider response. Validation and clear contracts are important at that boundary, particularly when frontend and backend contributors work in parallel.'
-      ] },
-      { title: 'Evidence and disclosure boundary', paragraphs: [
-        'This summary is limited to the role and contribution areas approved for public disclosure. Local project documentation and dependency manifests were reviewed to corroborate the technology summary.',
-        'Private code, proprietary architecture, provider configuration and internal test reports are not reproduced. No independent ownership of the complete product, production scale, live provider verification or commercial performance is claimed.'
-      ] }
-    ]
+      { title: 'What the backend supports', paragraphs: ['The backend connects the product interface, stored application data and external generation services. My work helps those parts exchange data through defined API contracts, with validation and tests around the integration points.'] }
+    ],
+    result: 'My contributions span backend services, database design, API integration and validation in an existing shared application. The work requires coordinating changes with collaborators and fitting them into the product development and deployment workflow.',
+    tools: 'Python and FastAPI provide the service layer. PostgreSQL stores application data, SQLAlchemy maps database models, and Alembic manages schema migrations.',
+    technical: [{ title: 'Working across application and provider boundaries', paragraphs: ['An application request and an external provider response have different validation and failure cases. Clear API contracts, focused tests and explicit handling of unsuccessful responses help frontend and backend contributors work against the same behavior.'] }],
+    limitations: 'This is collaborative contract work. Commercial source code, proprietary architecture and internal operational details remain confidential; the summary describes my contribution areas rather than ownership of the entire product.'
   },
   {
-    slug: 'portfolio-optimization', number: '04', name: 'Quantitative Portfolio Optimization',
-    category: 'Independent research',
-    summary: 'Exploring portfolio construction through assumptions, constraints and robustness rather than a single backtest.',
-    role: 'Independent research · Portfolio construction and risk evaluation',
-    tags: ['Python', 'Optimization', 'Risk analysis', 'Monte Carlo'],
+    slug: 'portfolio-optimization', number: '04', name: 'Quantitative Portfolio Optimization', category: 'Independent research',
+    summary: 'I compared ways to allocate a portfolio and tested how the results change when market assumptions become less favorable.',
+    role: 'Independent Project · 2025 - August 2026',
+    tags: ['Python', 'Portfolio allocation', 'Monte Carlo', 'Scenario analysis'],
     sections: [
-      { title: 'Research question', paragraphs: [
-        'How sensitive is a portfolio allocation to the assumptions used to build it? This independent research focuses on comparing portfolio construction methods and evaluating their behavior under uncertainty.',
-        'The methodological scope includes Markowitz mean-variance optimization, Black-Litterman, Risk Parity and Conditional Value at Risk (CVaR). Monte Carlo simulation and scenario analysis provide ways to examine robustness.'
+      { title: 'Why I built it', paragraphs: ['A portfolio allocation can look sensible under one set of assumptions and change sharply under another. I wanted to compare methods and understand how much their results depend on expected returns, risk estimates and constraints.'] },
+      { title: 'What I implemented', paragraphs: [], points: [
+        'Portfolio comparisons using Markowitz, Black-Litterman, Risk Parity and CVaR methods.',
+        'Scenario analysis for changing volatility, correlation, transaction costs and downside risk.',
+        'Monte Carlo-style tests and sensitivity analysis to examine how stable the allocations were.'
       ] },
-      { title: 'Methods and tradeoffs', paragraphs: [
-        'Mean-variance optimization makes expected returns and covariance estimates central to allocation. Black-Litterman provides a way to combine a prior with explicit views. Risk Parity shifts attention toward risk contributions, while CVaR focuses on the loss tail.',
-        'The useful comparison is not just which method produces the best retrospective chart. It also asks how weights respond to estimation error, how constraints affect concentration, and which assumptions dominate adverse scenarios.'
-      ] },
-      { title: 'Evidence boundary', paragraphs: [
-        'This is a concise account of the approved research scope. No reproducible comparison artifact or independently reviewed results table is published with this portfolio, so no method ranking, measured advantage or performance statistic is asserted.',
-        'The work is independent research. It does not represent institutional capital management, audited returns or production alpha.'
-      ] }
-    ]
+      { title: 'How I used the comparisons', paragraphs: ['I changed the inputs and reviewed how the weights, concentration and risk measures responded. That made it possible to compare each method\'s assumptions and failure modes alongside its historical output.'] }
+    ],
+    result: 'The project produced implemented comparisons across several allocation approaches and a way to examine their sensitivity to market assumptions. The useful outcome was understanding when an allocation becomes unstable and which inputs drive that behavior.',
+    tools: 'Python supports the allocation comparisons, simulation and scenario analysis.',
+    technical: [{ title: 'What the allocation methods optimize', paragraphs: [
+      'Markowitz balances expected return against variance. Black-Litterman combines a prior with explicit views. Risk Parity focuses on each holding\'s contribution to risk. Conditional Value at Risk (CVaR) examines losses in the tail.',
+      'Monte Carlo and scenario analysis test sensitivity to changing estimates and constraints. The comparison also considers volatility, covariance, drawdown and transaction-cost assumptions.'
+    ] }],
+    limitations: 'This is independent research. Reproducible comparison artifacts are not published here, and the portfolio makes no audited-return, method-ranking or production-alpha claim.'
   }
 ];
 
-export type Note = { slug: string; number: string; title: string; category: string; summary: string; sections: Section[] };
+export type Note = { slug: string; number: string; title: string; category: string; summary: string; takeaway: string; sections: Section[] };
 export const notes: Note[] = [
   {
     slug: 'dedicated-linux-market-data-collector', number: '01',
     title: 'Building a Dedicated Linux Market Data Collector', category: 'Systems reliability · 6 min read',
-    summary: 'Process ownership, durable shutdown and the boundary between implementation evidence and hardware acceptance.',
+    summary: 'Stopping a collector at the wrong moment can interrupt storage or leave background workers running. A dedicated Linux service needs to handle shutdown as carefully as collection.',
+    takeaway: 'Stop new inputs first, let storage finish within a deadline, and preserve a failed run for recovery when shutdown cannot complete cleanly.',
     sections: [
       { title: 'The original problem: shutdown is part of correctness', paragraphs: [
         'A market-data collector has more work to finish than closing its sockets. It must stop acquisition, drain pending output, preserve durable state, wait for persistence and retain a truthful terminal result.',
-        'The reviewed Linux preparation report identified a lifecycle defect in the earlier runtime: the stop handler stopped only one acquisition path, and its shared process owner could terminate persistence children while they still had work to finish. Porting that behavior to a service manager would not fix the ordering problem.'
+        'The reviewed Linux preparation report identified a lifecycle defect in the earlier runtime: the stop handler stopped only one acquisition path, and its shared process owner could terminate persistence children while they still had work to finish. Porting that behavior to a service manager would not fix the ordering problem. The dedicated Alienware Linux collector is the practical hardware context for this lifecycle work.'
       ] },
       { title: 'Investigation: identify the owner of every child', paragraphs: [
         'The ownership audit followed acquisition workers, the persistent writer, compaction and validation processes. It separated service liveness from dataset acceptance. A parent process exiting successfully cannot establish that its descendants completed their work.',
@@ -138,7 +153,7 @@ export const notes: Note[] = [
         'That evidence supports the implemented lifecycle contract in its tested environment. It does not establish physical-host cgroup cleanup, power-loss recovery, storage permissions, clock discipline or a successful long collection campaign. Those require separate host evidence.'
       ] },
       { title: 'Remaining limitations and the practical lesson', paragraphs: [
-        'This note reflects the reviewed preparation snapshot, not a current hardware acceptance report. Later deployment activity cannot be inferred from that snapshot. No uptime guarantee or blanket 24-hour collection success is claimed.',
+        'This note reflects the reviewed preparation snapshot. Physical-host acceptance and later 24-hour or 7-day collection outcomes require their own evidence.',
         'The general lesson is to define a collector’s end condition as carefully as its start condition. Service management should preserve the data-integrity contract through interruption, not replace it with a process-health indicator.'
       ] },
       { title: 'Evidence basis', paragraphs: ['Based on the private project’s Linux lifecycle preparation report and deployment documentation, plus the approved public project brief. This article is an original, sanitized engineering summary; private source and operational artifacts are not included.'] }
@@ -147,7 +162,8 @@ export const notes: Note[] = [
   {
     slug: 'websocket-reconnection-data-completeness', number: '02',
     title: 'Why WebSocket Reconnection Does Not Guarantee Data Completeness', category: 'Market data engineering · 5 min read',
-    summary: 'Transport recovery, order-book trust and persistence are different conditions. Monitor each one.',
+    summary: 'A connection can reopen while the local order book still lacks updates from the interruption. Research can reach the wrong conclusion if that interval is treated as complete.',
+    takeaway: 'Track connection health, data continuity and confirmed storage separately. A fresh snapshot starts a valid interval; it does not recreate the gap.',
     sections: [
       { title: 'The failure: a healthy socket can carry an incomplete story', paragraphs: [
         'An exchange connection can reopen after an interruption while the local order book still lacks the updates missed during the gap. A connection-health indicator answers whether transport is open. It does not answer whether a reconstructed book is valid.',
@@ -176,9 +192,9 @@ export const notes: Note[] = [
 
 export const pageMeta: Record<string, { title: string; description: string }> = {
   '/': { title: site.title, description: site.description },
-  '/projects/': { title: 'Selected engineering projects', description: 'Case studies in market data infrastructure, backend services and research systems.' },
+  '/projects/': { title: 'Selected engineering projects', description: 'What Tom Chen built, why he built it and the engineering behind the results.' },
   '/notes/': { title: 'Engineering notes', description: 'Technical notes on collector reliability, WebSocket continuity and evidence-driven failure investigation.' },
-  '/about/': { title: 'About Tom', description: 'Tom Chen: engineering focus, University of Toronto education and professional experience.' },
+  '/about/': { title: 'About Tom', description: 'Tom Chen, University of Toronto Mississauga BCom graduate and contract part-time Backend & Data Engineer at Lomidance.' },
   '/resume/': { title: 'Resume', description: 'A concise public resume for Tom Chen, focused on backend, data and market systems engineering.' },
   '/contact/': { title: 'Get in touch', description: 'Contact Tom Chen about backend, data, market systems and AI integration engineering roles.' }
 };

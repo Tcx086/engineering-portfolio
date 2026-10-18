@@ -1,49 +1,46 @@
-TOM CHEN
+Tom Chen
 Backend, Data & Market Systems Engineering
-tom863631@gmail.com | https://github.com/Tcx086
+tom863631@gmail.com
+https://github.com/Tcx086
 https://portfolio.tcx086.com
 
 PROFILE
-Building reliable data infrastructure, backend services, and AI-integrated systems.
-Independent market-data research and engineering, plus collaborative part-time
-contract backend development.
+Backend and data engineer working with Python, APIs and SQL databases. Contract part-time contributor at Lomidance, with independent projects in market data and financial research.
 
-CORE TECHNOLOGIES
-Python, TypeScript, SQL, FastAPI, PostgreSQL, SQLAlchemy, Alembic, REST APIs,
-WebSocket, Parquet, DuckDB, Linux, Git/GitHub, Cloudflare Workers and D1.
+TECHNICAL SKILLS
+Backend: Python, FastAPI, REST APIs, PostgreSQL, SQLAlchemy, Alembic
+Data: SQL, TypeScript, WebSocket, Parquet, DuckDB, Pandas, NumPy
+Systems: Linux, Git/GitHub, Cloudflare Workers, D1, validation and testing
 
 ENGINEERING EXPERIENCE
-Lomidance | Part-time contract engineering
-Backend services, database models, REST API contracts, external AI generation
-API integration, validation, tests and collaborative development workflows.
-Commercial code and architecture remain confidential.
+Lomidance | May 2026 - Present
+Backend & Data Engineer | Contract Part-time
+- Develop Python/FastAPI backend services and PostgreSQL models with SQLAlchemy and Alembic.
+- Integrate external AI generation services; validate API contracts, application data flows and failure handling.
+- Contribute focused tests and coordinate backend/frontend changes through shared Git/GitHub and deployment workflows.
 
 INDEPENDENT PROJECTS
-Microstructure Discovery Factory
-Multi-exchange Level-2 and trade acquisition, durable persistence, provenance,
-causal replay, recovery, reconciliation and operational failure investigation.
-Python, TypeScript, WebSocket, Parquet, DuckDB and Linux. Private repository.
+Microstructure Discovery Factory | August 2026 - Present
+Independent Researcher | Market Data & Systems
+- Built multi-exchange market data collection, storage, validation and replay with Python, TypeScript, Parquet and DuckDB.
+- One documented FOMC capture: 12/12 lanes, 653,722 L2 updates and 4,339,527 trades; observed approximately 68% displayed BTC/ETH depth contraction.
 
-Situation Monitor / Market Context Engine
-News and macroeconomic context, structured processing, source provenance,
-temporal guards and as-of research. Cloudflare Workers/D1, Python and TypeScript.
-Public site: https://news-monitor.tcx086.com/
+Situation Monitor / Market Context Engine | 2025 - Present
+Independent Product & Research Project
+- Built a dashboard organizing financial news, economic events and market context with source-linked records, historical selection and Cloudflare Workers/D1 persistence.
 
-Quantitative Portfolio Optimization
-Independent research scope: Markowitz, Black-Litterman, Risk Parity, CVaR,
-Monte Carlo, scenario analysis and robustness. No audited returns or alpha claim.
+Quantitative Portfolio Optimization | 2025 - August 2026
+Independent Project
+- Compared Markowitz, Black-Litterman, Risk Parity and CVaR methods using Monte Carlo-style tests, scenario analysis and sensitivity to risk and transaction-cost assumptions.
 
-OTHER PROFESSIONAL EXPERIENCE
-CCC Motors | Part-time Sales Associate | June 2024 - March 2026
-Customer transactions, financing documentation, operational coordination and
-structured Excel tracking.
-
-Hull Chrysler | Part-time Sales Associate | October 2023 - June 2024
-Financing workflows, transaction processing and record accuracy.
+VOLUNTEER EXPERIENCE
+Transcommon | September 2026 - Present
+Translation Quality Review Volunteer
+- Review translated documents for accuracy, completeness, terminology consistency and meaning preservation; flag omissions and requirement mismatches.
 
 EDUCATION
-University of Toronto | Bachelor of Commerce | April 2025
+University of Toronto Mississauga
+Bachelor of Commerce | April 2025
 
-INTERESTS
-Backend/Python development, data engineering, market data, trading systems,
-quantitative development, AI integration and automation engineering.
+HOBBY
+Golf - playing regularly since high school.

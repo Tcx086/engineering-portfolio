@@ -21,14 +21,14 @@ npm run preview -- --port 4173
 npm run test:browser
 ```
 
-The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, a resume download and basic resource budgets. It saves representative screenshots in ignored `test-results/`. `PORTFOLIO_BASE_URL` runs the same suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification.
+The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, PDF/TXT downloads, native expandable technical sections and basic resource budgets. It saves representative screenshots in ignored `test-results/`. `PORTFOLIO_BASE_URL` runs the same suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification.
 
 ## Architecture
 
 - SvelteKit 3 + Svelte 5 + TypeScript, Tailwind CSS 4.
 - `@sveltejs/adapter-static` prerenders the site into `build/`.
 - `csr = false`: visitors receive complete HTML; no client JavaScript is loaded.
-- Typed content in `src/lib/content.ts`; shared layout and original SVG diagrams.
+- Typed content in `src/lib/content.ts`; shared layout, responsive process diagrams and native expandable technical sections.
 - No database, authentication, third-party fonts, analytics or runtime API calls.
 - Vercel serves the static `build/` output; Cloudflare manages the portfolio subdomain's DNS. `vercel.json` supplies security headers and static hosting settings; `404.html` provides a real static error page. `_headers` retains equivalent Cloudflare-compatible headers.
 - Sitemap, robots, canonical URLs and Open Graph metadata are included. The original `static/og.svg` and its raster export `static/og.png` are checked in together.
@@ -56,7 +56,7 @@ Before first custom-domain setup, verify a successful isolated preview, add the 
 ## Content maintenance
 
 1. Edit `src/lib/content.ts` for project and note content. New project/note slugs are prerendered automatically.
-2. Keep the public HTML resume and `static/tom-chen-resume.txt` consistent.
+2. Edit `src/lib/resume.json` for resume facts. The HTML uses that source directly. Run `python scripts/generate-resume.py` with ReportLab and pypdf available to regenerate the public TXT, single-page PDF and their verification manifest. The script checks the PDF's page count and extracted facts; render the resulting PDF and inspect it after each edit. Build verification rejects stale generated files.
 3. Update the route expectations in `scripts/verify-build.mjs` and `tests/portfolio.spec.ts` when adding pages.
 4. Run checks, build and focused verification before pushing. Review the preview at desktop and mobile sizes.
 5. Keep approved contact details and canonical domain consistent across metadata, the sitemap and robots.
@@ -69,7 +69,8 @@ Content is based on the approved owner brief, reviewed private engineering docum
 - Situation Monitor's historical 106K/207K counts and 110-item parity total are withheld pending dated, scoped evidence.
 - The Linux note distinguishes a software-preparation snapshot and synthetic checks from physical-host acceptance.
 - Lomidance is part-time contract collaboration. No commercial source, proprietary architecture or internal operational artifacts are included.
-- Portfolio optimization describes an approved independent research scope. Reproducible results are not provided, and no return, alpha or method-ranking claim is made.
+- Resume and project facts were checked against the approved Master Resume v4.4. Public resume versions use only the selected engineering experience, independent projects, Transcommon volunteering, education, skills and hobby. Private contact and work-authorization fields are excluded.
+- Portfolio optimization describes implemented comparisons confirmed by that source. Reproducible results are not published, and no return, alpha or method-ranking claim is made.
 - There is no CS degree, institutional quant employment, audited trading return or autonomous multi-agent product claim.
 
 The build verification includes a focused public-output privacy scan. Also inspect source changes manually before publication: no pattern-based scan can identify every confidential statement.

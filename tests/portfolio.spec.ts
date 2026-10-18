@@ -30,7 +30,21 @@ test('keyboard navigation, project links and resume download work', async ({ pag
   await page.getByRole('link', { name: 'Resume', exact: true }).click();
   const download = page.waitForEvent('download');
   await page.getByRole('link', { name: /Download resume/ }).click();
-  expect((await download).suggestedFilename()).toBe('tom-chen-resume.txt');
+  expect((await download).suggestedFilename()).toBe('tom-chen-resume.pdf');
+  const textDownload = page.waitForEvent('download');
+  await page.getByRole('link', { name: /Plain text version/ }).click();
+  expect((await textDownload).suggestedFilename()).toBe('tom-chen-resume.txt');
+});
+test('technical details are optional and keyboard accessible', async ({ page }) => {
+  await page.goto('/projects/microstructure-discovery-factory/');
+  const detail = page.locator('details').first();
+  const content = detail.getByText(/The pipeline separates/);
+  await expect(content).toBeHidden();
+  await detail.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(content).toBeVisible();
+  const a11y = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  expect(a11y.violations).toEqual([]);
 });
 test('representative rendering and basic resource budget', async ({ page }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
