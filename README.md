@@ -21,7 +21,7 @@ npm run preview -- --port 4173
 npm run test:browser
 ```
 
-The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, PDF/TXT downloads, native expandable technical sections and basic resource budgets. It saves representative screenshots in ignored `test-results/`. `PORTFOLIO_BASE_URL` runs the same suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification.
+The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, full/concise PDF and TXT downloads, native expandable technical sections and basic resource budgets. It saves representative screenshots in ignored `test-results/`. `PORTFOLIO_BASE_URL` runs the same suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification.
 
 ## Architecture
 
@@ -56,7 +56,7 @@ Before first custom-domain setup, verify a successful isolated preview, add the 
 ## Content maintenance
 
 1. Edit `src/lib/content.ts` for project and note content. New project/note slugs are prerendered automatically.
-2. Edit `src/lib/resume.json` for resume facts. The HTML uses that source directly. Run `python scripts/generate-resume.py` with ReportLab and pypdf available to regenerate the public TXT, single-page PDF and their verification manifest. The script checks the PDF's page count and extracted facts; render the resulting PDF and inspect it after each edit. Build verification rejects stale generated files.
+2. Edit `src/lib/resume.json` for resume facts. Shared names, roles, dates, education and contacts serve both versions. `fullProfile`, `fullSkills` and `fullBullets` retain the master version's breadth; `concise` selects the three projects for the short PDF/TXT and HTML overview. Run `python scripts/generate-resume.py` with ReportLab and pypdf available to regenerate both PDFs, the concise TXT and the verification manifest. The script checks extracted facts, sections, pagination, metadata, contact-link annotations and PDF object structure. Render every page and inspect it after edits. Build verification rejects stale generated files.
 3. Update the route expectations in `scripts/verify-build.mjs` and `tests/portfolio.spec.ts` when adding pages.
 4. Run checks, build and focused verification before pushing. Review the preview at desktop and mobile sizes.
 5. Keep approved contact details and canonical domain consistent across metadata, the sitemap and robots.
@@ -66,11 +66,19 @@ Before first custom-domain setup, verify a successful isolated preview, add the 
 Content is based on the approved owner brief, reviewed private engineering documentation and the master resume as a factual reference. Private material is summarized, never copied into this repository. The public contact is **tom863631@gmail.com**; the master resume's private contact fields and old LinkedIn account are excluded.
 
 - FOMC capture counts describe **one documented event capture**, not general completeness, uptime or a later 24-hour campaign.
-- Situation Monitor's historical 106K/207K counts and 110-item parity total are withheld pending dated, scoped evidence.
+- Situation Monitor's case study omits undated totals. The full resume preserves the supplied v4.4 historical counts and parity result with explicit source-version labels; these are not claims about current totals or throughput.
 - The Linux note distinguishes a software-preparation snapshot and synthetic checks from physical-host acceptance.
 - Lomidance is part-time contract collaboration. No commercial source, proprietary architecture or internal operational artifacts are included.
-- Resume and project facts were checked against the approved Master Resume v4.4. Public resume versions use only the selected engineering experience, independent projects, Transcommon volunteering, education, skills and hobby. Private contact and work-authorization fields are excluded.
+- Resume facts were checked against the actual owner-supplied `Tom_Chen_Master_Resume_v4_4.pdf`. The full public derivative includes all six quantitative/analytical projects, contracted work, volunteering, education, skills, languages and hobby. The concise version remains an unchanged one-page engineering selection. Private contact and work-authorization fields are excluded.
 - Portfolio optimization describes implemented comparisons confirmed by that source. Reproducible results are not published, and no return, alpha or method-ranking claim is made.
 - There is no CS degree, institutional quant employment, audited trading return or autonomous multi-agent product claim.
 
 The build verification includes a focused public-output privacy scan. Also inspect source changes manually before publication: no pattern-based scan can identify every confidential statement.
+
+## Full resume provenance and layout
+
+Portfolio v1.2's public full resume was transcribed and edited from the actual two-page Master Resume v4.4 supplied by the owner. It is generated from selected public-safe facts, never by redacting or copying the original PDF's objects. The original and its extracted text remain outside tracked files and public output.
+
+The derivative uses three pages with 10-point body text: professional profile/skills/work, quantitative projects, then analytical projects/volunteering/education/languages/hobby. A two-page flow split the primary case study and required further compression; the third page preserves readable type and all six projects. Repetitive prose and stack descriptions were consolidated. The original document's application-use notice, private contact/authorization details, personal trading-capital amount, confidential Lomidance module details, closed-test-user reference and volatile authored-commit total were omitted. No major section or project was removed.
+
+The existing `/tom-chen-resume.pdf` and TXT bytes are preserved. The primary download is `/tom-chen-master-resume-public.pdf`. Only approved public contacts and city-level location appear. PDF generation permits only the intended contact-link annotations and rejects forms, attachments, optional-content layers, scripts, embedded objects and invisible text modes. These structural checks complement source review and rendered inspection; they do not make privacy review exhaustive.

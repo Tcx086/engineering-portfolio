@@ -52,9 +52,9 @@ assert.ok(!allFiles.some((file) => file.endsWith('_worker.js')), 'No server runt
 assert.ok((await stat(join(root, 'og.png'))).size > 1000, 'Raster Open Graph image exists');
 const resume = JSON.parse(await readFile('src/lib/resume.json', 'utf8'));
 const resumeArtifacts = JSON.parse(await readFile('src/lib/resume-artifacts.json', 'utf8'));
-for (const [key, path] of Object.entries({ source: 'src/lib/resume.json', txt: 'build/tom-chen-resume.txt', pdf: 'build/tom-chen-resume.pdf' })) {
+for (const [key, path] of Object.entries({ source: 'src/lib/resume.json', txt: 'build/tom-chen-resume.txt', pdf: 'build/tom-chen-resume.pdf', fullPdf: 'build/tom-chen-master-resume-public.pdf' })) {
   const bytes = await readFile(path);
-  const content = key === 'pdf' ? bytes : bytes.toString('utf8').replaceAll('\r\n', '\n');
+  const content = key === 'source' || key === 'txt' ? bytes.toString('utf8').replaceAll('\r\n', '\n') : bytes;
   assert.equal(createHash('sha256').update(content).digest('hex'), resumeArtifacts[key], `Stale resume ${key}; run scripts/generate-resume.py`);
 }
 const resumeHtml = await readFile(join(root, 'resume/index.html'), 'utf8');
@@ -62,10 +62,16 @@ const resumeTxt = await readFile(join(root, 'tom-chen-resume.txt'), 'utf8');
 const normalize = (text) => text.replaceAll('&amp;', '&').replaceAll('&#39;', "'").replaceAll('&quot;', '"').replace(/\s+/g, ' ').trim();
 const visibleResume = normalize(resumeHtml.replace(/<[^>]*>/g, ' '));
 const facts = (value) => typeof value === 'string' ? [value] : Object.values(value).flatMap(facts);
-for (const fact of facts(resume)) {
+const entryFacts = (item) => [item.name, item.role, item.dates, ...item.bullets];
+const conciseFacts = [resume.name, resume.headline, resume.email, resume.github, resume.website, resume.profile, ...resume.skills, ...resume.experience.flatMap(entryFacts), ...resume.projects.filter((item) => item.concise).flatMap(entryFacts), ...entryFacts(resume.volunteer), resume.education.school, resume.education.credential, resume.hobby];
+for (const fact of conciseFacts) {
   assert.ok(normalize(resumeTxt).includes(normalize(fact)), `TXT resume missing: ${fact}`);
   assert.ok(fact.startsWith('https://') ? resumeHtml.includes(`href="${fact}"`) : visibleResume.includes(normalize(fact)), `HTML resume missing: ${fact}`);
 }
 assert.doesNotMatch(resumeHtml + resumeTxt, /CCC Motors|Hull Chrysler|Boba Green|linkedin\.com|\b\d{3}[-. ]\d{3}[-. ]\d{4}\b/i);
+assert.doesNotMatch(facts(resume).join('\n'), /CCC Motors|Hull Chrysler|Boba Green|linkedin\.com|Xiangyun|work permit|passport|immigration|visa|2\.5K|\b\d{3}[-. ]\d{3}[-. ]\d{4}\b|\b[A-Z]\d[A-Z][ -]?\d[A-Z]\d\b/i);
+assert.equal(resume.projects.length, 6, 'Full resume includes all six v4.4 projects');
+assert.equal(resumeArtifacts.fullPages, 3);
+assert.ok(resumeHtml.indexOf('href="/tom-chen-master-resume-public.pdf"') < resumeHtml.indexOf('href="/tom-chen-resume.pdf"'), 'Full resume is the primary download');
 for (const [email] of resumeTxt.matchAll(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi)) assert.equal(email, resume.email);
-console.log(JSON.stringify({ routes: 12, htmlFiles: htmlFiles.length, internalLinksChecked: links, maximumHtmlGzipBytes: maximumPageBytes, totalCssGzipBytes: cssBytes, privacyScan: 'passed', resumeConsistency: 'HTML/TXT facts and generated PDF hash verified', runtime: 'static; no client JavaScript loaded' }, null, 2));
+console.log(JSON.stringify({ routes: 12, htmlFiles: htmlFiles.length, internalLinksChecked: links, maximumHtmlGzipBytes: maximumPageBytes, totalCssGzipBytes: cssBytes, privacyScan: 'passed', resumeConsistency: 'HTML/TXT facts and both generated PDF hashes verified', runtime: 'static; no client JavaScript loaded' }, null, 2));

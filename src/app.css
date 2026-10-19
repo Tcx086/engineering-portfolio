@@ -181,6 +181,15 @@ nav .nav-contact { border: 1px solid #4b6262; padding: 10px 17px; color: var(--a
 .resume-layout aside > p:not(.eyebrow) { margin-bottom: 16px; }
 .resume-body .resume-role { color: #9fc5bb; font-size: 14px; line-height: 1.7; }
 .resume-body ul { margin-top: 14px; }
+.resume-options { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin: 0 0 60px; }
+.resume-option { border: 1px solid var(--line); padding: 30px; display: flex; flex-direction: column; align-items: flex-start; }
+.resume-option.recommended { border-color: #81bdb2; background: #162225; }
+.resume-option h2 { font-size: 28px; margin: 12px 0; letter-spacing: -.025em; }
+.resume-option > p:not(.eyebrow) { color: var(--muted); font-size: 16px; margin-bottom: 24px; }
+.resume-option .button { margin-top: auto; font-size: 13px; gap: 12px; }
+.resume-option .text-link { font-size: 13px; margin-top: 12px; }
+.button-secondary { color: var(--accent); border: 1px solid #81bdb2; background: transparent; }
+.button-secondary:hover { color: #101719; background: var(--accent); }
 
 @media (min-width: 1600px) { .hero { padding-block: 90px; } }
 @media (max-width: 1050px) {
@@ -249,6 +258,8 @@ nav .nav-contact { border: 1px solid #4b6262; padding: 10px 17px; color: var(--a
   .large-monogram { font-size: 80px; }
   .about-statement .eyebrow { margin-top: 0; }
   .resume-layout { grid-template-columns: 1fr; gap: 45px; padding-top: 0; }
+  .resume-options { grid-template-columns: 1fr; gap: 20px; margin-bottom: 45px; }
+  .resume-option { padding: 24px; }
   .resume-layout .article-body { margin: 0; }
   .contact-options > a { grid-template-columns: 1fr 22px; gap: 12px; padding-block: 25px; }
   .contact-options > a > .eyebrow { grid-column: 1/-1; }

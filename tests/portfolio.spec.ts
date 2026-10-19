@@ -28,12 +28,19 @@ test('keyboard navigation, project links and resume download work', async ({ pag
   await page.getByRole('link', { name: 'Microstructure Discovery Factory', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Microstructure Discovery Factory');
   await page.getByRole('link', { name: 'Resume', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Resume & Experience');
+  await expect(page.getByText(/Recommended · 3 pages/)).toBeVisible();
+  await expect(page.getByText(/Quick review · 1 page/)).toBeVisible();
+  const fullDownload = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'Download Full Resume (PDF)', exact: true }).click();
+  expect((await fullDownload).suggestedFilename()).toBe('tom-chen-master-resume-public.pdf');
   const download = page.waitForEvent('download');
-  await page.getByRole('link', { name: /Download resume/ }).click();
+  await page.getByRole('link', { name: 'Download Concise Resume (PDF)', exact: true }).click();
   expect((await download).suggestedFilename()).toBe('tom-chen-resume.pdf');
   const textDownload = page.waitForEvent('download');
   await page.getByRole('link', { name: /Plain text version/ }).click();
   expect((await textDownload).suggestedFilename()).toBe('tom-chen-resume.txt');
+  await page.screenshot({ path: `test-results/resume-${test.info().project.name}.png`, fullPage: true });
 });
 test('technical details are optional and keyboard accessible', async ({ page }) => {
   await page.goto('/projects/microstructure-discovery-factory/');
