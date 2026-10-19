@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <defs><linearGradient id="night" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080d16"/><stop offset="1" stop-color="#172c43"/></linearGradient></defs>
+  <defs><linearGradient id="night" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080808"/><stop offset="1" stop-color="#191715"/></linearGradient></defs>
   <rect width="1200" height="630" fill="url(#night)"/>
-  <g fill="none" stroke="#6b9db5" stroke-opacity=".2"><path d="M750 560V260h30v-35h40v-50h30v-45h24v45h30v50h40v35h30v300M991 560V330h40v-35h63v35h40v230M30 105h1140M60 545h1080"/><path d="M800 560V280h96v280M1038 560V350h48v210M828 298v235m40-235v235"/></g>
-  <path d="M1140 130v-70h-70M60 475v70h70" fill="none" stroke="#cfb88a"/>
-  <text x="65" y="78" fill="#8bdde8" font-family="monospace" font-size="23">TOM CHEN / ENGINEERING PORTFOLIO</text>
-  <text x="60" y="264" fill="#e9eef3" font-family="Arial,sans-serif" font-size="78" font-weight="bold">Backend, Data &amp;</text>
-  <text x="60" y="356" fill="#8bdde8" font-family="Arial,sans-serif" font-size="78" font-weight="bold">Market Systems.</text>
-  <text x="65" y="440" fill="#bcc9d6" font-family="Arial,sans-serif" font-size="23">Market data infrastructure. Backend services. AI integrations.</text>
-  <text x="65" y="590" fill="#cfb88a" font-family="monospace" font-size="20">portfolio.tcx086.com</text>
+  <g fill="none" stroke="#aa8242" stroke-opacity=".2"><path d="M750 560V260h30v-35h40v-50h30v-45h24v45h30v50h40v35h30v300M991 560V330h40v-35h63v35h40v230M30 105h1140M60 545h1080"/><path d="M800 560V280h96v280M1038 560V350h48v210M828 298v235m40-235v235"/></g>
+  <path d="M1140 130V60h-30V40H90v20H60v415M1128 130V72h-30V52H102v20H72v403M60 475v70h70m-46-12h30v20h972v-20h30v-58M550 40l50-24 50 24-50 24z" fill="none" stroke="#d7af58"/>
+  <text x="65" y="78" fill="#d7af58" font-family="monospace" font-size="23">TOM CHEN / ENGINEERING PORTFOLIO</text>
+  <text x="60" y="264" fill="#f1e4c9" font-family="Arial,sans-serif" font-size="78" font-weight="bold">Backend, Data &amp;</text>
+  <text x="60" y="356" fill="#d7af58" font-family="Arial,sans-serif" font-size="78" font-weight="bold">Market Systems.</text>
+  <text x="65" y="440" fill="#c9beaa" font-family="Arial,sans-serif" font-size="23">Market data infrastructure. Backend services. AI integrations.</text>
+  <text x="65" y="590" fill="#d7af58" font-family="monospace" font-size="20">portfolio.tcx086.com</text>
 </svg>

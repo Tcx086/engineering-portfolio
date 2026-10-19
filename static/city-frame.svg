@@ -1,10 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" fill="none">
-  <defs><linearGradient id="steel" x1="700" y1="30" x2="700" y2="620" gradientUnits="userSpaceOnUse"><stop stop-color="#77bfd0" stop-opacity=".24"/><stop offset="1" stop-color="#77bfd0" stop-opacity=".025"/></linearGradient></defs>
-  <g stroke="url(#steel)" stroke-width="1">
-    <path d="M460 620V290h30v-40h45v-42h76v42h45v370M682 620V165h27v-40h30V83h18V45h14v38h18v42h30v40h27v455M877 620V328h39v-41h55v-30h53v30h55v41h39v292"/>
-    <path d="M502 620V318h112v302M724 620V185h81v435M938 620V354h114v266M743 202v389m43-389v389M519 338v253m78-253v253M955 377v214m80-214v214"/>
-    <path d="M440 591h724M432 563h724M420 620V431h-57v-48h-88v48h-57v189M270 450h96v170M1153 620V398h47M757 45V13m-40 111h94M670 165h188M447 290h221"/>
-    <path d="M0 620h1200M0 112h1200M0 138h1200M180 0v620M1000 0v620" stroke-dasharray="2 12"/>
-  </g>
-  <path d="M1181 24h-70m70 0v70M205 596h70m-70 0v-70" stroke="#cfb88a" stroke-opacity=".4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" fill="none" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse"><stop stop-color="#AA8242"/><stop offset=".48" stop-color="#F1E4C9"/><stop offset=".64" stop-color="#D7AF58"/><stop offset="1" stop-color="#AA8242"/></linearGradient>
+    <linearGradient id="city" x2="0" y2="1"><stop stop-color="#D7AF58" stop-opacity=".22"/><stop offset="1" stop-color="#AA8242" stop-opacity=".06"/></linearGradient>
+    <g id="wing" stroke="url(#gold)">
+      <path d="M22 710V116h24V86h24V56h460M34 690V128h24V98h24V68h426" opacity=".65"/>
+      <path d="M46 738V420h24v-38h22v-34h22v-48h20v-34h18v34h20v48h22v34h22v38h24v318" fill="url(#city)" opacity=".65"/>
+      <path d="M85 738V445h117v293m-95-273v247m24-280v280m24-280v280m24-247v247M143 266v-50m-8 20h16" opacity=".5"/>
+      <path d="M240 738V540h27v-36h23v-48h18v48h23v36h27v198M266 738V562h67v176m-46-159v143m24-143v143" opacity=".22"/>
+      <path d="M0 738h530M70 56 300 0m-150 56L400 0m-166 56L500 0M46 86l214-86" opacity=".16"/>
+      <path d="M70 718h390l24-24h46M82 730h390l24-24h34" opacity=".5"/>
+    </g>
+  </defs>
+  <use href="#wing"/><use href="#wing" transform="translate(1200) scale(-1 1)"/>
+  <g stroke="url(#gold)"><path d="m530 56 70-30 70 30-70 30zM546 56l54-18 54 18-54 18zM600 0v26m0 60v24M530 718h46l24-24 24 24h46m-106 12h24l12-12 12 12h24"/><path d="M580 56h40m-20-8v16" opacity=".7"/></g>
 </svg>
