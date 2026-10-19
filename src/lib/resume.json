@@ -4,6 +4,17 @@
   "email": "tom863631@gmail.com",
   "github": "https://github.com/Tcx086",
   "website": "https://portfolio.tcx086.com",
+  "location": "Mississauga, Ontario, Canada",
+  "sourceVersion": "Tom Chen Master Resume v4.4",
+  "fullProfile": "University of Toronto BCom graduate combining financial-market research, data and systems engineering, early-stage AI product development, and quality review. Specializes in market microstructure and data integrity: multi-venue acquisition, exact order-book and trade facts, causal replay, validation, observability, recovery, and research-ready storage. Brings hands-on backend development, source checking, issue investigation, and clear communication with cross-functional collaborators.",
+  "fullSkills": [
+    "Programming & Data: Python, SQL, TypeScript, basic Rust, Pandas, NumPy, FastAPI, PostgreSQL, SQLite, DuckDB, SQLAlchemy, Alembic, JSON/CSV, Parquet.",
+    "Market & Trading Data: Crypto derivatives, perpetual futures, Level-2 order books, trades, funding, open interest, mark/oracle state, liquidations, basis, liquidity/depth, replay, market-event research.",
+    "Data Quality & Controls: Normalization, schema validation, sequence integrity, duplicate/conflict detection, reconciliation, causal timestamps, source identity, audit trails, root-cause investigation, go/no-go readiness gates.",
+    "Systems & Infrastructure: REST/WebSocket APIs, durable spool/landing, immutable Parquet, DuckDB compaction, observability, structured logs, recovery, Vercel, Cloudflare Workers/D1, Git/GitHub, CI-style testing.",
+    "Analytics & Modeling: Excel, Power BI, statistical/financial analysis, volatility, drawdown, CVaR, Monte Carlo, factor/regime analysis, credit-risk modeling, scenario testing, market/macro/event research.",
+    "Quality & Collaboration: Document review, requirements validation, terminology consistency, exception tracking, technical documentation, stakeholder coordination, Excel reporting, translation QA."
+  ],
   "profile": "Backend and data engineer working with Python, APIs and SQL databases. Contract part-time contributor at Lomidance, with independent projects in market data and financial research.",
   "skills": [
     "Backend: Python, FastAPI, REST APIs, PostgreSQL, SQLAlchemy, Alembic",
@@ -14,6 +25,12 @@
     "name": "Lomidance",
     "role": "Backend & Data Engineer | Contract Part-time",
     "dates": "May 2026 - Present",
+    "fullBullets": [
+      "Contribute to an early-stage AI workspace for multi-scene generative-video production in a shared product codebase.",
+      "Own substantial backend/database work with Python, FastAPI, PostgreSQL, SQLAlchemy and Alembic: API contracts, schema/model design, migrations, application data flows, and frontend/backend integration.",
+      "Built and hardened multimodal service boundaries, validation fixtures, redaction and failure-safe helpers, focused tests, and deployment integration with explicit provider/runtime boundaries.",
+      "Integrated external generation APIs and verified an end-to-end application workflow through successful video output. Collaborate through Git/GitHub and Vercel-based development and deployment workflows."
+    ],
     "bullets": [
       "Develop Python/FastAPI backend services and PostgreSQL models with SQLAlchemy and Alembic.",
       "Integrate external AI generation services; validate API contracts, application data flows and failure handling.",
@@ -25,6 +42,17 @@
       "name": "Microstructure Discovery Factory",
       "role": "Independent Researcher | Market Data & Systems",
       "dates": "August 2026 - Present",
+      "concise": true,
+      "group": "Quantitative Projects",
+      "fullBullets": [
+        "Designed and built a causal market-data capture, persistence, replay, research and validation system spanning Binance, OKX, Bybit, Deribit and Hyperliquid. The pipeline runs from WebSocket acquisition and normalization through exact L2/trade facts, durable spool/landing, Parquet commit markers, an active-part index and bounded DuckDB compaction to replay/research.",
+        "Operate six common perpetual trade lanes for BTC/ETH across Binance, OKX and Bybit, plus primary-venue L2 capture, Deribit option-state feeds, and Hyperliquid funding, open-interest, premium and mark/oracle state.",
+        "One live FOMC capture completed 12/12 lanes with 653,722 L2 updates and 4,339,527 trades; v4.4 records zero sequence mismatches, normalization rejections, duplicates or source-identity conflicts, with peak RSS of 2.887 GiB. These are results from that capture.",
+        "Used the event data to quantify approximately 68% contraction in displayed BTC/ETH depth and measure subsequent liquidity recovery.",
+        "Investigated sequence gaps, reconnect behavior, persistence failures, stale replay boundaries, queue pressure and latency outliers using source evidence, structured logs, replay and reconciliation. Replaced starvation-prone queues with bounded ring-style storage and cooperative draining; propagated integrity failures into research-readiness checks.",
+        "Built causal replay using exchange-event, received and available timestamps, immutable landing metadata and bounded research readers to reduce future leakage. Developed a downstream Liquidation Pressure layer retaining provenance, sparse-state semantics, explicit missingness and causal query boundaries without changing authoritative raw facts.",
+        "Maintained acceptance criteria, blocker tracking, durability/recovery checks, protected interfaces, closure reports and regression suites across runtime, workstation, replay, dashboard and research components. Stack: Python, TypeScript/Node.js, Rust components, WebSockets, Parquet, DuckDB, local dashboards and structured logging."
+      ],
       "bullets": [
         "Built multi-exchange market data collection, storage, validation and replay with Python, TypeScript, Parquet and DuckDB.",
         "One documented FOMC capture: 12/12 lanes, 653,722 L2 updates and 4,339,527 trades; observed approximately 68% displayed BTC/ETH depth contraction."
@@ -34,6 +62,15 @@
       "name": "Situation Monitor / Market Context Engine",
       "role": "Independent Product & Research Project",
       "dates": "2025 - Present",
+      "concise": true,
+      "group": "Analytical Projects",
+      "fullBullets": [
+        "Built a market-context system combining macroeconomic data, economic expectations, news narratives, regulatory/policy information, geopolitical developments and market data for structured event interpretation and research.",
+        "The v4.4 historical snapshot reports 106K+ news records and 207K+ structured LLM-extraction rows, with controls for source coverage, missing values, duplicates, schema consistency, reproducibility and downstream research use. These are source-version totals, not current throughput claims.",
+        "Developed a Trusted Context Foundation with strict macro identities, immutable pre-event expectations, canonical actual/revision handling, deterministic fact selection, temporal guards and as-of event inspection.",
+        "Connected the runtime to Cloudflare Workers/D1 and validated durable write/read/redeploy persistence. The v4.4 snapshot records 5 tables, 11 indexes, 12 triggers and a passing 110-item live parity suite covering ordering, revisions, inspection and temporal guards.",
+        "Maintained a production-facing Svelte/SvelteKit/TypeScript frontend, server-side provider access, caching and secret isolation. Kept rule-based narrative/impact signals separate from source facts without unsupported predictive claims; used the system for provenance, normalization, deterministic selection, failure handling, deployment and validation."
+      ],
       "bullets": [
         "Built a dashboard organizing financial news, economic events and market context with source-linked records, historical selection and Cloudflare Workers/D1 persistence."
       ]
@@ -42,8 +79,48 @@
       "name": "Quantitative Portfolio Optimization",
       "role": "Independent Project",
       "dates": "2025 - August 2026",
+      "concise": true,
+      "group": "Quantitative Projects",
+      "fullBullets": [
+        "Built and compared Markowitz, maximum-Sharpe/minimum-volatility, risk-parity, Black-Litterman, CVaR, factor-aware, dynamic/regime-aware and multi-objective portfolio-allocation approaches.",
+        "Evaluated changing volatility, correlation, covariance, downside-risk, transaction-cost and market-state assumptions using scenario analysis, Monte Carlo-style testing, drawdown sensitivity and risk-adjusted metrics. Compared assumptions and failure modes rather than treating optimization output as a stand-alone investment decision."
+      ],
       "bullets": [
         "Compared Markowitz, Black-Litterman, Risk Parity and CVaR methods using Monte Carlo-style tests, scenario analysis and sensitivity to risk and transaction-cost assumptions."
+      ]
+    },
+    {
+      "name": "Historical Live Perpetual Futures Execution",
+      "role": "Independent Trader | Own Capital",
+      "dates": "2026",
+      "concise": false,
+      "group": "Quantitative Projects",
+      "bullets": [
+        "Previously ran own-capital USDT-margined perpetual-futures exposure, primarily on OKX. Live trading is paused while the next-generation research and market-data infrastructure is rebuilt and validated.",
+        "Monitored order placement/fills, leverage, funding exposure, transaction costs, slippage, position risk and drawdown controls. Compared cross-venue funding, spot-perpetual basis, liquidity/depth, open interest, order flow and liquidations to distinguish venue dislocations from broader market changes.",
+        "Kept live, paper/replay and test workflows separate to validate execution and strategy changes before broader use; signals were not treated as automatic execution triggers."
+      ]
+    },
+    {
+      "name": "Credit Risk Modeling",
+      "role": "University / Independent Analytical Project",
+      "dates": "2025",
+      "concise": false,
+      "group": "Analytical Projects",
+      "bullets": [
+        "Analyzed 34,000+ applicant records using logistic regression, random forest and XGBoost. Evaluated accuracy, precision, recall, F1, ROC-AUC, confusion matrices and SHAP-based feature interpretation.",
+        "Compared default-risk identification approaches with an emphasis on validation and interpretability; model scores were not treated as stand-alone credit decisions."
+      ]
+    },
+    {
+      "name": "Legacy API-Based Trading & Monitoring Workflows",
+      "role": "Independent Projects",
+      "dates": "2024 - August 2026",
+      "concise": false,
+      "group": "Analytical Projects",
+      "bullets": [
+        "Integrated public REST/WebSocket market-data feeds, local SQLite storage, alert/command workflows, transaction-cost assumptions, position limits, drawdown controls and structured runtime logs.",
+        "Used monitoring and validation to identify data-quality issues, execution-assumption gaps, anomalies and recovery needs; documented fixes and follow-up tests. These workflows informed Microstructure Discovery Factory and are no longer the canonical research infrastructure."
       ]
     }
   ],
@@ -51,11 +128,18 @@
     "name": "Transcommon",
     "role": "Translation Quality Review Volunteer",
     "dates": "September 2026 - Present",
+    "fullBullets": [
+      "Review translations against source material and requirements for accuracy, completeness, consistent terminology, meaning preservation and formatting quality.",
+      "Flag mistranslations, omissions, inconsistent terminology, ambiguous phrasing and requirement mismatches for correction before final use."
+    ],
     "bullets": ["Review translated documents for accuracy, completeness, terminology consistency and meaning preservation; flag omissions and requirement mismatches."]
   },
   "education": {
     "school": "University of Toronto Mississauga",
-    "credential": "Bachelor of Commerce | April 2025"
+    "credential": "Bachelor of Commerce | April 2025",
+    "attendance": "September 2021 - April 2025",
+    "areas": "Relevant areas: Business Analytics, Economics, Finance/Financial Fundamentals, and Data Analysis."
   },
+  "languages": "Mandarin Chinese - Native; English - Professional Working Proficiency; French - Beginner.",
   "hobby": "Golf - playing regularly since high school."
 }

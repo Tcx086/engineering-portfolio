@@ -195,7 +195,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   '/projects/': { title: 'Selected engineering projects', description: 'What Tom Chen built, why he built it and the engineering behind the results.' },
   '/notes/': { title: 'Engineering notes', description: 'Technical notes on collector reliability, WebSocket continuity and evidence-driven failure investigation.' },
   '/about/': { title: 'About Tom', description: 'Tom Chen, University of Toronto Mississauga BCom graduate and contract part-time Backend & Data Engineer at Lomidance.' },
-  '/resume/': { title: 'Resume', description: 'A concise public resume for Tom Chen, focused on backend, data and market systems engineering.' },
+  '/resume/': { title: 'Resume & Experience', description: 'Tom Chen’s full professional background and concise engineering resume, covering backend work, data systems, financial research and analytical projects.' },
   '/contact/': { title: 'Get in touch', description: 'Contact Tom Chen about backend, data, market systems and AI integration engineering roles.' }
 };
 for (const project of projects) pageMeta[`/projects/${project.slug}/`] = { title: project.name, description: project.summary };
