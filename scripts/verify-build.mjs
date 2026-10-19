@@ -31,7 +31,7 @@ for (const file of htmlFiles) {
   if (file.endsWith(join('microstructure-discovery-factory', 'index.html'))) {
     assert.equal(scripts.length, 1, 'Only the isolated public monitor module is loaded');
     assert.match(scripts[0], /\/_app\/immutable\/assets\/public-monitor\.[\w-]+\.mjs$/);
-    assert.ok((await stat(join(root, scripts[0]))).size < 9000, 'Public monitor module budget: 9 KB');
+    assert.ok((await stat(join(root, scripts[0]))).size < 12000, 'Public monitor module budget: 12 KB including bounded reads and freshness checks');
   } else assert.equal(scripts.length, 0, `Other pages load no client JavaScript: ${file}`);
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
   assert.equal(new Set(ids).size, ids.length, `Duplicate IDs: ${file}`);

@@ -66,7 +66,7 @@ test('public monitor accepts reviewed live data and refreshes without overlappin
   await page.clock.install();
   await page.route(snapshotPath, async route => { requests++; methods.push(route.request().method()); await route.fulfill({ json: { ...liveFixture(), tradesPersisted: requests * 1234 } }); });
   await page.goto(collectorPath);
-  await expect(page.getByRole('status')).toHaveText('Live public data');
+  await expect(page.getByRole('status')).toHaveText('COLLECTING · LIVE');
   await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toHaveText('1,234');
   await expect(page.locator('[data-monitor-field="sequenceErrors"]')).toHaveText('0');
   await page.clock.fastForward(30_000);
@@ -78,29 +78,66 @@ test('public monitor keeps its server-rendered fallback when refresh fails', asy
   page.on('pageerror', error => errors.push(error.message));
   await page.route(snapshotPath, route => route.fulfill({ status: 503, body: '' }));
   await page.goto(collectorPath);
-  await expect(page.getByRole('status')).toHaveText('Refresh unavailable · data retained');
-  await expect(page.locator('[data-monitor-summary]')).toContainText('12/12 lanes');
+  await expect(page.getByRole('status')).toHaveText('Unavailable · last verified data retained');
+  await expect(page.locator('[data-monitor-summary]')).toContainText('No current-run research finding');
   await page.locator('.monitor-telemetry summary').focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('[data-monitor-field="sequenceErrors"]')).toHaveText('Not published');
   expect(errors).toEqual([]);
 });
+test('a retained observation ages out when the publisher stops sending updates', async ({ page }) => {
+  await page.clock.install();
+  const fixed = liveFixture();
+  await page.route(snapshotPath, route => route.fulfill({ json: fixed }));
+  await page.goto(collectorPath);
+  await expect(page.getByRole('status')).toHaveText('COLLECTING · LIVE');
+  await page.clock.fastForward(190_000);
+  await expect(page.getByRole('status')).toHaveText('STALE / DATA DELAYED');
+  await expect(page.locator('[data-monitor-field="elapsedSeconds"]')).toHaveText('0h 1m');
+  await page.unroute(snapshotPath);
+  await page.route(snapshotPath, route => route.fulfill({ status: 503 }));
+  await page.clock.fastForward(30_000);
+  await expect(page.getByRole('status')).toHaveText('Unavailable · last verified data retained');
+  await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toHaveText('1,234');
+});
+test('stopped and synthetic observations never display a live indicator', async ({ page }) => {
+  await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), collectorState: 'stopped' } }));
+  await page.goto(collectorPath);
+  await expect(page.getByRole('status')).toHaveText('STOPPED');
+  await page.unroute(snapshotPath);
+  await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), mode: 'synthetic' } }));
+  await page.reload();
+  await expect(page.getByRole('status')).toHaveText('Synthetic test data · NOT LIVE');
+  await expect(page.locator('.public-monitor')).toHaveAttribute('data-status', 'snapshot');
+});
+test('regressing counters retain verified values and reduced motion suppresses number transitions', async ({ page }) => {
+  let requests = 0;
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.clock.install();
+  await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), tradesPersisted: ++requests === 1 ? 1234 : 1 } }));
+  await page.goto(collectorPath);
+  await expect(page.getByRole('status')).toHaveText('COLLECTING · LIVE');
+  expect(await page.locator('[data-monitor-field="tradesPersisted"]').evaluate(el => el.getAnimations().length)).toBe(0);
+  await page.clock.fastForward(30_000);
+  await expect(page.getByRole('status')).toHaveText('Unavailable · last verified data retained');
+  await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toHaveText('1,234');
+});
 test('public monitor rejects private fields and keeps delayed observations honest', async ({ page }) => {
   await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), hostname: 'PRIVATE_TEST_VALUE' } }));
   await page.goto(collectorPath);
-  await expect(page.getByRole('status')).toHaveText('Refresh unavailable · data retained');
+  await expect(page.getByRole('status')).toHaveText('Unavailable · last verified data retained');
   await expect(page.locator('body')).not.toContainText('PRIVATE_TEST_VALUE');
   await page.unroute(snapshotPath);
-  await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), observedAt: new Date(Date.now() - 180000).toISOString().replace(/\.\d{3}Z$/, 'Z') } }));
+  await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), observedAt: new Date(Date.now() - 240000).toISOString().replace(/\.\d{3}Z$/, 'Z') } }));
   await page.reload();
-  await expect(page.getByRole('status')).toHaveText('Delayed public data');
+  await expect(page.getByRole('status')).toHaveText('STALE / DATA DELAYED');
 });
 test.describe('monitor without JavaScript', () => {
   test.use({ javaScriptEnabled: false });
   test('retained evidence and native telemetry disclosure still work', async ({ page }) => {
     await page.goto(collectorPath);
     await expect(page.getByRole('status')).toHaveText('Snapshot only');
-    await expect(page.locator('[data-monitor-summary]')).toContainText('12/12 lanes');
+    await expect(page.locator('[data-monitor-summary]')).toContainText('No current-run research finding');
     await page.locator('.monitor-telemetry summary').focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toBeVisible();

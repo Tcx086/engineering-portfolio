@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { isPublicSnapshot, publicSnapshot, monitorValue, monitorStatus } from '../src/lib/public-monitor.mjs';
+import { isPublicSnapshot, publicSnapshot, monitorValue, monitorStatus, forwardObservation, boundedJson } from '../src/lib/public-monitor.mjs';
 
 const retained = JSON.parse(readFileSync(new URL('../static/monitoring/collector-public.json', import.meta.url), 'utf8'));
 const now = Date.now();
@@ -20,8 +20,20 @@ test('live observations format actual values including a genuine zero', () => {
   assert.equal(monitorValue(data, 'tradesPersisted'), '1,234');
   assert.equal(monitorValue(data, 'sequenceErrors'), '0');
   assert.equal(monitorValue(data, 'elapsedSeconds'), '0h 1m');
-  assert.equal(monitorStatus(data, now), 'Live public data');
-  assert.equal(monitorStatus(data, now + 121000), 'Delayed public data');
+  assert.equal(monitorStatus(data, now), 'COLLECTING · LIVE');
+  assert.equal(monitorStatus(data, now + 181000), 'STALE / DATA DELAYED');
+  assert.equal(monitorStatus({ ...data, collectorState: 'stopped' }, now), 'STOPPED');
+  assert.equal(monitorStatus({ ...data, mode: 'synthetic' }, now), 'Synthetic test data · NOT LIVE');
+});
+test('old observations and regressing persisted counters cannot replace verified data', () => {
+  const data = publicSnapshot(active());
+  assert.equal(forwardObservation(data, { ...data, tradesPersisted: 1 }), false);
+  assert.equal(forwardObservation(data, { ...data, observedAt: iso(now - 1000) }), false);
+  assert.equal(forwardObservation(data, { ...data, tradesPersisted: 1500 }), true);
+});
+test('streaming public JSON is bounded even without content-length', async () => {
+  await assert.rejects(boundedJson(new Response('x'.repeat(4097)), 4096), /Body limit/);
+  assert.deepEqual(await boundedJson(new Response('{"ok":true}'), 4096), { ok: true });
 });
 test('unknown fields cannot enter a published artifact', () => {
   assert.equal(isPublicSnapshot({ ...retained, hostname: 'PRIVATE_TEST_VALUE' }), false);
