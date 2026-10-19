@@ -1,20 +1,52 @@
 <script lang="ts">
   import { projects, notes, site } from '#lib/content.ts';
-  import Diagram from '#lib/Diagram.svelte';
+  import CaptureEvidence from '#lib/CaptureEvidence.svelte';
 </script>
 
 <section class="hero">
-  <div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> TOM CHEN / ENGINEERING</p><h1>Backend, data &<br /><span>market systems.</span></h1><p class="hero-description">{site.description}</p><p class="hero-detail">I work where data quality meets system reliability — from exchange streams and durable pipelines to backend APIs and AI integrations.</p><div class="hero-actions"><a class="button" href="/projects/">Explore my work <span aria-hidden="true">↗</span></a><a class="text-link" href="/resume/">View resume <span aria-hidden="true">→</span></a></div></div>
-  <div class="hero-visual"><Diagram /><div class="visual-caption"><span>01 / ACQUIRE</span><span>02 / PRESERVE</span><span>03 / VERIFY</span></div></div>
+  <div class="hero-copy">
+    <p class="eyebrow">Tom Chen / Backend & data engineering</p>
+    <h1>Hi, I'm Tom.<br />I build backend &<br /><span>data systems.</span></h1>
+    <p class="hero-description">I turn complex market data into software people can inspect and use.</p>
+    <p class="hero-detail">My work includes live data collectors, financial research tools and backend integrations with AI services.</p>
+    <div class="hero-actions"><a class="button" href="/projects/">Explore my work <span aria-hidden="true">↗</span></a><a class="text-link" href="/resume/">View resume <span aria-hidden="true">→</span></a></div>
+  </div>
+  <aside class="hero-context" aria-label="Current role and background">
+    <p class="eyebrow"><span class="status-dot"></span>Currently at Lomidance</p>
+    <h2>Backend &<br />Data Engineer</h2>
+    <p class="context-date">Contract Part-time · May 2026 - Present</p>
+    <p>I contribute backend services, database models and external AI integrations in a shared product codebase.</p>
+    <p class="context-stack">Python · FastAPI · PostgreSQL</p>
+    <a href="/projects/lomidance/" class="text-link">My contribution <span aria-hidden="true">↗</span></a>
+    <div class="context-education"><p>University of Toronto Mississauga</p><span>Bachelor of Commerce · April 2025</span></div>
+  </aside>
 </section>
-<div class="intro-strip"><span class="eyebrow">BUILT WITH INTENT</span><p>Reliable systems begin with clear contracts.<br class="desktop-only" /> Good research begins with trustworthy data.</p><a href="/about/" class="text-link">A little about me <span aria-hidden="true">↗</span></a></div>
 
-<section class="home-section" aria-labelledby="selected-work"><div class="section-heading"><div><p class="eyebrow">01 / SELECTED WORK</p><h2 id="selected-work">Engineering, in practice.</h2></div><a href="/projects/" class="text-link">All projects <span aria-hidden="true">↗</span></a></div>
-  <article class="featured-project"><div><p class="eyebrow">FEATURED / MARKET DATA INFRASTRUCTURE</p><h3><a href={`/projects/${projects[0].slug}/`}>{projects[0].name}</a></h3><p>{projects[0].summary}</p><div class="tags">{#each projects[0].tags.slice(0, 5) as tag}<span>{tag}</span>{/each}</div><a class="text-link" href={`/projects/${projects[0].slug}/`}>Read the case study <span aria-hidden="true">↗</span></a></div><div class="capture-evidence"><p class="eyebrow">ONE DOCUMENTED FOMC EVENT CAPTURE</p><div class="big-evidence">12<span>/12</span><small>capture lanes</small></div><div class="evidence-row"><div><strong>653,722</strong><span>Level-2 updates</span></div><div><strong>4,339,527</strong><span>trades captured</span></div></div><p class="evidence-note">Event-specific evidence. No blanket completeness or uptime claim.</p></div></article>
-  <div class="project-rows">{#each projects.slice(1) as project}<article class="project-row"><span class="row-number">{project.number}</span><div><p class="eyebrow">{project.category}</p><h3><a href={`/projects/${project.slug}/`}>{project.name}</a></h3><p>{project.summary}</p></div><a class="arrow-link" href={`/projects/${project.slug}/`} aria-label={`Read ${project.name} case study`}>↗</a></article>{/each}</div>
+<section class="home-section selected-work" aria-labelledby="selected-work">
+  <div class="section-heading"><div><p class="eyebrow">01 / Featured projects</p><h2 id="selected-work">What I've been building.</h2></div><a href="/projects/" class="text-link">All projects <span aria-hidden="true">↗</span></a></div>
+  <article class="featured-project">
+    <div><p class="eyebrow">Independent / Market data infrastructure</p><h3><a href={`/projects/${projects[0].slug}/`}>{projects[0].name}</a></h3><p>{projects[0].summary}</p><a class="text-link" href={`/projects/${projects[0].slug}/`}>How I built it <span aria-hidden="true">↗</span></a></div>
+    <CaptureEvidence />
+  </article>
+  <div class="supporting-projects">
+    {#each projects.slice(1, 3) as project}
+      <article class="supporting-project"><p class="eyebrow">{project.category}</p><h3><a href={`/projects/${project.slug}/`}>{project.name}</a></h3><p>{project.summary}</p><a class="text-link" href={`/projects/${project.slug}/`}>Explore the work <span aria-hidden="true">↗</span></a></article>
+    {/each}
+  </div>
 </section>
 
-<section class="home-section focus-section" aria-labelledby="focus"><div><p class="eyebrow">02 / TECHNICAL FOCUS</p><h2 id="focus">The work<br />behind the interface.</h2><p class="muted max-copy">Systems that remain understandable when a source stalls, an integration fails or the assumptions change.</p></div><div class="focus-list"><div><span>01</span><h3>Backend & integrations</h3><p>Python, FastAPI, SQL and API contracts. Clear boundaries between a request, an external provider and durable state.</p></div><div><span>02</span><h3>Data & market infrastructure</h3><p>WebSocket acquisition, order-book continuity, Parquet persistence and evidence-aware replay.</p></div><div><span>03</span><h3>Reliability & investigation</h3><p>Structured diagnostics, explicit failure states and focused checks that make the limits of a result visible.</p></div></div></section>
+<section class="home-section focus-section" aria-labelledby="focus">
+  <div><p class="eyebrow">02 / Technical skills</p><h2 id="focus">The tools I use,<br />and what I use them for.</h2><p class="muted max-copy">Applied in independent research projects and collaborative backend work.</p></div>
+  <div class="focus-list">
+    <div><span>01</span><h3>Backend development</h3><p><strong>Python, FastAPI and REST APIs</strong> for backend services and integrations with external AI providers.</p></div>
+    <div><span>02</span><h3>Databases & data pipelines</h3><p><strong>PostgreSQL, SQLAlchemy and Alembic</strong> for application data. <strong>Parquet and DuckDB</strong> for stored market data and analysis.</p></div>
+    <div><span>03</span><h3>Collection & delivery</h3><p><strong>TypeScript, WebSocket and Linux</strong> for live collection. <strong>Git/GitHub, Cloudflare Workers and D1</strong> for collaboration, APIs and event history.</p></div>
+  </div>
+</section>
 
-<section class="home-section" aria-labelledby="notes"><div class="section-heading"><div><p class="eyebrow">03 / ENGINEERING NOTES</p><h2 id="notes">What the failures teach.</h2></div><a href="/notes/" class="text-link">All notes <span aria-hidden="true">↗</span></a></div><div class="notes-grid">{#each notes as note}<article class="note-card"><p class="eyebrow">{note.category}</p><h3><a href={`/notes/${note.slug}/`}>{note.title}</a></h3><p>{note.summary}</p><a class="text-link" href={`/notes/${note.slug}/`}>Read note <span aria-hidden="true">↗</span></a></article>{/each}</div></section>
-<section class="contact-callout"><p class="eyebrow">LET’S BUILD SOMETHING RELIABLE</p><h2>Good systems.<br /><span>Thoughtful teams.</span></h2><div><p>Interested in backend, data, market systems<br class="desktop-only" /> and AI integration engineering opportunities.</p><a class="button" href={`mailto:${site.email}`}>Get in touch <span aria-hidden="true">↗</span></a></div></section>
+<section class="home-section" aria-labelledby="notes">
+  <div class="section-heading"><div><p class="eyebrow">03 / Engineering notes</p><h2 id="notes">Lessons from building and debugging.</h2></div><a href="/notes/" class="text-link">All notes <span aria-hidden="true">↗</span></a></div>
+  <div class="notes-grid">{#each notes as note}<article class="note-card"><p class="eyebrow">{note.category}</p><h3><a href={`/notes/${note.slug}/`}>{note.title}</a></h3><p>{note.summary}</p><a class="text-link" href={`/notes/${note.slug}/`}>Read note <span aria-hidden="true">↗</span></a></article>{/each}</div>
+</section>
+
+<section class="contact-callout"><p class="eyebrow">Get in touch</p><h2>Have an engineering<br /><span>role in mind?</span></h2><div><p>I'm interested in backend, data engineering, market systems and AI integration opportunities.</p><a class="button" href={`mailto:${site.email}`}>Email Tom <span aria-hidden="true">↗</span></a></div></section>

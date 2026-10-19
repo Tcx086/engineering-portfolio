@@ -1,0 +1,61 @@
+{
+  "name": "Tom Chen",
+  "headline": "Backend, Data & Market Systems Engineering",
+  "email": "tom863631@gmail.com",
+  "github": "https://github.com/Tcx086",
+  "website": "https://portfolio.tcx086.com",
+  "profile": "Backend and data engineer working with Python, APIs and SQL databases. Contract part-time contributor at Lomidance, with independent projects in market data and financial research.",
+  "skills": [
+    "Backend: Python, FastAPI, REST APIs, PostgreSQL, SQLAlchemy, Alembic",
+    "Data: SQL, TypeScript, WebSocket, Parquet, DuckDB, Pandas, NumPy",
+    "Systems: Linux, Git/GitHub, Cloudflare Workers, D1, validation and testing"
+  ],
+  "experience": [{
+    "name": "Lomidance",
+    "role": "Backend & Data Engineer | Contract Part-time",
+    "dates": "May 2026 - Present",
+    "bullets": [
+      "Develop Python/FastAPI backend services and PostgreSQL models with SQLAlchemy and Alembic.",
+      "Integrate external AI generation services; validate API contracts, application data flows and failure handling.",
+      "Contribute focused tests and coordinate backend/frontend changes through shared Git/GitHub and deployment workflows."
+    ]
+  }],
+  "projects": [
+    {
+      "name": "Microstructure Discovery Factory",
+      "role": "Independent Researcher | Market Data & Systems",
+      "dates": "August 2026 - Present",
+      "bullets": [
+        "Built multi-exchange market data collection, storage, validation and replay with Python, TypeScript, Parquet and DuckDB.",
+        "One documented FOMC capture: 12/12 lanes, 653,722 L2 updates and 4,339,527 trades; observed approximately 68% displayed BTC/ETH depth contraction."
+      ]
+    },
+    {
+      "name": "Situation Monitor / Market Context Engine",
+      "role": "Independent Product & Research Project",
+      "dates": "2025 - Present",
+      "bullets": [
+        "Built a dashboard organizing financial news, economic events and market context with source-linked records, historical selection and Cloudflare Workers/D1 persistence."
+      ]
+    },
+    {
+      "name": "Quantitative Portfolio Optimization",
+      "role": "Independent Project",
+      "dates": "2025 - August 2026",
+      "bullets": [
+        "Compared Markowitz, Black-Litterman, Risk Parity and CVaR methods using Monte Carlo-style tests, scenario analysis and sensitivity to risk and transaction-cost assumptions."
+      ]
+    }
+  ],
+  "volunteer": {
+    "name": "Transcommon",
+    "role": "Translation Quality Review Volunteer",
+    "dates": "September 2026 - Present",
+    "bullets": ["Review translated documents for accuracy, completeness, terminology consistency and meaning preservation; flag omissions and requirement mismatches."]
+  },
+  "education": {
+    "school": "University of Toronto Mississauga",
+    "credential": "Bachelor of Commerce | April 2025"
+  },
+  "hobby": "Golf - playing regularly since high school."
+}

@@ -1,4 +1,4 @@
 <script lang="ts">import { site } from '#lib/content.ts';</script>
-<div class="page-intro contact-intro"><p class="eyebrow">OPEN A CONVERSATION</p><h1>Let’s build<br /><span>something reliable.</span></h1><p>For engineering opportunities, technical conversations and thoughtful collaboration.</p></div>
+<div class="page-intro contact-intro"><p class="eyebrow">Contact Tom Chen</p><h1>Let's talk<br /><span>about the work.</span></h1><p>Have a backend, data or AI integration role in mind? Email me to discuss the opportunity or ask about a project.</p></div>
 <div class="contact-options"><a href={`mailto:${site.email}`}><span class="eyebrow">01 / EMAIL</span><span>{site.email}</span><span aria-hidden="true">↗</span></a><a href={site.github}><span class="eyebrow">02 / GITHUB</span><span>github.com/Tcx086</span><span aria-hidden="true">↗</span></a><a href="/resume/"><span class="eyebrow">03 / BACKGROUND</span><span>View my resume</span><span aria-hidden="true">↗</span></a></div>
 <p class="contact-footnote">Interested in backend / Python, data engineering, market data, trading systems, quantitative development, and AI systems / automation roles.</p>
