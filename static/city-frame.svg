@@ -1,16 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" fill="none" preserveAspectRatio="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none">
+  <style>path,line{vector-effect:non-scaling-stroke}.skyline{transform:translate(12px,-156px) scale(.2)}@media(max-width:600px){.skyline{transform:translate(12px,-110px) scale(.14)}}</style>
   <defs>
-    <linearGradient id="gold" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse"><stop stop-color="#AA8242"/><stop offset=".48" stop-color="#F1E4C9"/><stop offset=".64" stop-color="#D7AF58"/><stop offset="1" stop-color="#AA8242"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse"><stop stop-color="#AA8242"/><stop offset=".48" stop-color="#F1E4C9"/><stop offset=".64" stop-color="#D7AF58"/><stop offset="1" stop-color="#AA8242"/></linearGradient>
     <linearGradient id="city" x2="0" y2="1"><stop stop-color="#D7AF58" stop-opacity=".22"/><stop offset="1" stop-color="#AA8242" stop-opacity=".06"/></linearGradient>
-    <g id="wing" stroke="url(#gold)">
-      <path d="M22 710V116h24V86h24V56h460M34 690V128h24V98h24V68h426" opacity=".65"/>
+    <g id="buildings" stroke="url(#gold)">
       <path d="M46 738V420h24v-38h22v-34h22v-48h20v-34h18v34h20v48h22v34h22v38h24v318" fill="url(#city)" opacity=".65"/>
       <path d="M85 738V445h117v293m-95-273v247m24-280v280m24-280v280m24-247v247M143 266v-50m-8 20h16" opacity=".5"/>
       <path d="M240 738V540h27v-36h23v-48h18v48h23v36h27v198M266 738V562h67v176m-46-159v143m24-143v143" opacity=".22"/>
-      <path d="M0 738h530M70 56 300 0m-150 56L400 0m-166 56L500 0M46 86l214-86" opacity=".16"/>
-      <path d="M70 718h390l24-24h46M82 730h390l24-24h34" opacity=".5"/>
     </g>
+    <g id="wing" stroke="url(#gold)">
+      <g opacity=".65"><path d="M1 96V60h13V38h18V20h20M8 96V68h18V48h18V32h20"/><line x1="1" y1="96" x2="1" y2="100%"/><line x1="8" y1="96" x2="8" y2="100%"/><line x1="52" y1="20" x2="100%" y2="20"/><line x1="64" y1="32" x2="100%" y2="32"/></g>
+      <g opacity=".16"><line x1="32" y1="20" x2="55%" y2="0"/><line x1="70" y1="20" x2="70%" y2="0"/><line x1="130" y1="20" x2="85%" y2="0"/></g>
+    </g>
+    <mask id="ornament-gap"><rect width="100%" height="100%" fill="white"/><svg x="50%" overflow="visible"><rect x="-52" width="104" height="88" fill="black"/></svg></mask>
   </defs>
-  <use href="#wing"/><use href="#wing" transform="translate(1200) scale(-1 1)"/>
-  <g stroke="url(#gold)"><path d="m530 56 70-30 70 30-70 30zM546 56l54-18 54 18-54 18zM600 0v26m0 60v24M530 718h46l24-24 24 24h46m-106 12h24l12-12 12 12h24"/><path d="M580 56h40m-20-8v16" opacity=".7"/></g>
+  <g mask="url(#ornament-gap)"><svg width="50%" height="100%" overflow="visible"><use href="#wing"/></svg><svg x="100%" width="50%" height="100%" overflow="visible"><use href="#wing" transform="scale(-1 1)"/></svg></g>
+  <svg y="100%" overflow="visible"><use id="skyline-left" href="#buildings" class="skyline"/></svg>
+  <svg x="100%" y="100%" overflow="visible"><g transform="scale(-1 1)"><use id="skyline-right" href="#buildings" class="skyline"/></g></svg>
+  <svg x="50%" overflow="visible"><g id="top-ornament" transform="translate(-360) scale(.6)" stroke="url(#gold)"><path d="m530 56 70-30 70 30-70 30zM546 56l54-18 54 18-54 18zM600 0v26m0 60v24"/><path d="M580 56h40m-20-8v16" opacity=".7"/></g></svg>
+  <svg x="50%" y="100%" overflow="visible"><g id="bottom-ornament" transform="translate(-360 -452) scale(.6)" stroke="url(#gold)"><path d="M530 718h46l24-24 24 24h46m-106 12h24l12-12 12 12h24"/></g></svg>
 </svg>
