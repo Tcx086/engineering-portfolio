@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { DatabaseSync } from 'node:sqlite';
 import { generateKeyPairSync, sign } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, symlinkSync, rmSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import worker from './worker.mjs';
 import { sanitizeDashboard, publishOnce } from './exporter.mjs';
 import { dashboardFixture, publicFixture } from './fixtures.mjs';
@@ -62,6 +65,21 @@ test('exporter reads one bounded projection and sends only its sanitized payload
   assert.equal(requests[1].options.method, 'POST');
   assert.doesNotMatch(requests[1].options.body, /PRIVATE_TEST/);
 });
+test('same-host publication permits only the existing read-only loopback source', async () => {
+  const env = { PUBLIC_PUBLISH_ENABLED: 'true', PUBLIC_SOURCE_URL: 'http://127.0.0.1:8787/api/collector',
+    PUBLIC_INGEST_URL: 'https://example.invalid/ingest', PUBLIC_SIGNING_KEY: signingKey, PUBLIC_ALIAS_KEY: token };
+  let requests = 0;
+  await publishOnce(env, async (_url, options) => {
+    requests++;
+    if (requests === 1) { assert.equal(options.method ?? 'GET', 'GET'); return Response.json(dashboardFixture()); }
+    return new Response(null, { status: 202 });
+  });
+  assert.equal(requests, 2);
+  for (const source of ['http://127.0.0.1:8788/api/collector', 'http://127.0.0.2:8787/api/collector',
+    'http://example.invalid/api/collector', 'http://127.0.0.1:8787/api/control', 'http://127.0.0.1:8787/api/collector?control=1']) {
+    await assert.rejects(publishOnce({ ...env, PUBLIC_SOURCE_URL: source }, () => assert.fail('Invalid source requested')), /configuration invalid/);
+  }
+});
 test('Dashboard overview authority takes precedence over legacy lane totals', () => {
   const source = dashboardFixture(); source.trade_lanes.forEach(l => { l.persisted = 1; });
   const data = sanitizeDashboard(source, token);
@@ -112,4 +130,33 @@ test('unknown fields, oversized streams and stale source observations never ente
   const oversized = new Request(request.url, { method: 'POST', headers: request.headers, body: ' '.repeat(4097) });
   assert.equal((await worker.fetch(oversized, env)).status, 400);
   assert.equal((await worker.fetch(new Request('https://example.invalid/public/collector'), env)).status, 503);
+});
+test('Linux installation preserves other jobs and refuses duplicates or unreadable crontabs', { skip: process.platform !== 'linux' }, t => {
+  const directory = mkdtempSync(join(tmpdir(), 'publisher-install-'));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const state = join(directory, 'crontab'), config = join(directory, 'config.json');
+  writeFileSync(config, '{}');
+  writeFileSync(join(directory, 'crontab-command'), `#!/bin/sh
+if [ "$1" = -l ]; then
+  if [ -n "$TEST_CRON_ERROR" ]; then echo 'Permission denied' >&2; exit 1; fi
+  cat "$TEST_CRON_STATE"
+else cat > "$TEST_CRON_STATE"
+fi
+`, { mode: 0o700 });
+  // The stub replaces only the user's crontab boundary; the installer runs unmodified.
+  const bin = join(directory, 'bin');
+  mkdirSync(bin);
+  symlinkSync(join(directory, 'crontab-command'), join(bin, 'crontab'));
+  const env = { ...process.env, PATH: `${bin}:${process.env.PATH}`, TEST_CRON_STATE: state };
+  const install = extra => spawnSync('sh', ['telemetry/install-publisher.sh', process.execPath, config], { env: { ...env, ...extra }, encoding: 'utf8' });
+  const previous = '# existing job\n0 4 * * * echo retained\n';
+  writeFileSync(state, previous);
+  assert.equal(install({}).status, 0);
+  const installed = readFileSync(state, 'utf8');
+  assert.ok(installed.startsWith(previous));
+  assert.equal(installed.split('# portfolio-public-telemetry').length, 2);
+  assert.notEqual(install({}).status, 0);
+  assert.equal(readFileSync(state, 'utf8'), installed);
+  assert.notEqual(install({ TEST_CRON_ERROR: '1' }).status, 0);
+  assert.equal(readFileSync(state, 'utf8'), installed);
 });

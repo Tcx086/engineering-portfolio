@@ -35,7 +35,8 @@ export function sanitizeDashboard(source, aliasKey, now = Date.now()) {
 export async function publishOnce(env = process.env, transport = fetch) {
   if (env.PUBLIC_PUBLISH_ENABLED !== 'true') return { state: 'disabled', requests: 0 };
   const source = new URL(env.PUBLIC_SOURCE_URL), target = new URL(env.PUBLIC_INGEST_URL);
-  if (source.protocol !== 'https:' || !source.hostname.endsWith('.ts.net') || source.port || source.pathname !== '/api/collector' || source.search || source.username || source.password ||
+  const privateSource = (source.protocol === 'https:' && source.hostname.endsWith('.ts.net') && !source.port) || source.origin === 'http://127.0.0.1:8787';
+  if (!privateSource || source.pathname !== '/api/collector' || source.search || source.username || source.password ||
       target.protocol !== 'https:' || target.pathname !== '/ingest' || target.search || target.username || target.password ||
       typeof env.PUBLIC_SIGNING_KEY !== 'string' || !env.PUBLIC_SIGNING_KEY.includes('PRIVATE KEY')) throw new Error('Exporter configuration invalid');
   const observation = await transport(source, { signal: AbortSignal.timeout(5000), redirect: 'error', credentials: 'omit' });
