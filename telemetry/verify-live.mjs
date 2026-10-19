@@ -17,7 +17,11 @@ try {
     requests.push(url.pathname);
   });
   page.on('response', async response => {
-    if (new URL(response.url()).pathname === '/api/collector-public/' && response.status() === 200) observations.push(publicSnapshot(await response.json()));
+    if (new URL(response.url()).pathname !== '/api/collector-public/' || response.status() !== 200) return;
+    let data;
+    // A response with an unavailable browser body cannot qualify as evidence.
+    try { data = await response.json(); } catch { return; }
+    observations.push(publicSnapshot(data));
   });
   await page.goto(`${base}/projects/microstructure-discovery-factory/`);
   await expect(page.locator('[data-monitor-field="l2Persisted"]')).not.toHaveText('Not published');
