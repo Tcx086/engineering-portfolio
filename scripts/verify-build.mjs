@@ -59,7 +59,7 @@ assert.ok((await stat(join(root, 'og.png'))).size > 1000, 'Raster Open Graph ima
 const snapshot = publicSnapshot(JSON.parse(await readFile(join(root, 'monitoring/collector-public.json'), 'utf8')));
 assert.ok((await stat(join(root, 'monitoring/collector-public.json'))).size < 4096);
 assert.match(await readFile(join(root, 'projects/microstructure-discovery-factory/index.html'), 'utf8'), /Read-only \/ Public monitoring/);
-assert.equal(snapshot.mode, 'snapshot', 'This release has no approved live collector feed');
+assert.equal(snapshot.mode, 'snapshot', 'The static artifact is a fallback; changing observations come from the isolated public API');
 const resume = JSON.parse(await readFile('src/lib/resume.json', 'utf8'));
 const resumeArtifacts = JSON.parse(await readFile('src/lib/resume-artifacts.json', 'utf8'));
 for (const [key, path] of Object.entries({ source: 'src/lib/resume.json', txt: 'build/tom-chen-resume.txt', pdf: 'build/tom-chen-resume.pdf', fullPdf: 'build/tom-chen-master-resume-public.pdf' })) {

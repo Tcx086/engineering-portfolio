@@ -5,6 +5,7 @@
   "buildCommand": "npm run check && npm run build && npm test",
   "outputDirectory": "build",
   "trailingSlash": true,
+  "rewrites": [{ "source": "/api/collector-public/", "destination": "https://portfolio-public-telemetry.957658986chen.workers.dev/public/collector" }],
   "headers": [{
     "source": "/(.*)",
     "headers": [

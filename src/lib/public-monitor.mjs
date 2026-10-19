@@ -1,4 +1,4 @@
-/** @typedef {{schemaVersion: number, mode: 'snapshot'|'live'|'synthetic', preparedAt: string, observedAt: string|null, runId: string|null, collectorState: string, elapsedSeconds: number|null, tradesPersisted: number|null, l2Persisted: number|null, sequenceErrors: number|null, campaignResult: string, lastRunSummary: string}} PublicSnapshot */
+/** @typedef {{schemaVersion: number, mode: 'snapshot'|'live'|'observed'|'synthetic', preparedAt: string, observedAt: string|null, runId: string|null, collectorState: string, elapsedSeconds: number|null, tradesPersisted: number|null, l2Persisted: number|null, sequenceErrors: number|null, campaignResult: string, lastRunSummary: string}} PublicSnapshot */
 export const FRESHNESS_MS = 180_000;
 const keys = ['schemaVersion', 'mode', 'preparedAt', 'observedAt', 'runId', 'collectorState', 'elapsedSeconds', 'tradesPersisted', 'l2Persisted', 'sequenceErrors', 'campaignResult', 'lastRunSummary'];
 const states = { not_published: 'Not published', collecting: 'Collecting', draining: 'Finishing storage', stopped: 'Stopped', unavailable: 'Unavailable' };
@@ -10,7 +10,7 @@ export function isPublicSnapshot(value, now = Date.now()) {
   const data = /** @type {Record<string, unknown>} */ (value);
   const timestamp = (/** @type {unknown} */ date) => typeof date === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(date) && Number.isFinite(Date.parse(date)) && new Date(date).toISOString().replace('.000Z', 'Z') === date && Date.parse(date) <= now + 15_000;
   if (Object.keys(data).length !== keys.length || !keys.every(key => Object.hasOwn(data, key))) return false;
-  if (data.schemaVersion !== 1 || typeof data.mode !== 'string' || !['snapshot', 'live', 'synthetic'].includes(data.mode) || !timestamp(data.preparedAt)) return false;
+  if (data.schemaVersion !== 1 || typeof data.mode !== 'string' || !['snapshot', 'live', 'observed', 'synthetic'].includes(data.mode) || !timestamp(data.preparedAt)) return false;
   if (data.observedAt !== null && !timestamp(data.observedAt)) return false;
   if (data.observedAt && Date.parse(String(data.observedAt)) > Date.parse(String(data.preparedAt))) return false;
   if (data.runId !== null && (typeof data.runId !== 'string' || !/^public-[a-z0-9-]{1,40}$/.test(data.runId))) return false;
@@ -49,13 +49,14 @@ export function monitorStatus(data, now = Date.now()) {
   if (data.mode === 'snapshot') return 'Snapshot only';
   if (data.mode === 'synthetic') return now - Date.parse(data.observedAt || '') > FRESHNESS_MS ? 'Synthetic test data · STALE / DATA DELAYED' : 'Synthetic test data · NOT LIVE';
   if (!data.observedAt || now - Date.parse(data.observedAt) > FRESHNESS_MS) return 'STALE / DATA DELAYED';
+  if (data.mode === 'observed') return 'Observed · live verification pending';
   if (data.collectorState === 'stopped') return 'STOPPED';
   return data.collectorState === 'collecting' ? 'COLLECTING · LIVE' : monitorValue(data, 'collectorState').toUpperCase();
 }
 /** @param {PublicSnapshot} data */
 export function monitorDescription(data) {
   if (data.mode === 'synthetic') return 'Labeled synthetic fixtures exercise the publication path. These values are not collector observations.';
-  return data.mode === 'live' ? 'Read-only collector observations. Counters and elapsed time describe the observation shown; they do not advance between observations. Reported L2 sequence errors cover the monitored L2 lanes, not dataset certification.' : 'Live integration unverified. Current run values remain unpublished. The documented research capture is separate below.';
+  return ['live', 'observed'].includes(data.mode) ? 'Read-only Dashboard observations. Trades include option trades; totals can stay unchanged between durable writes. Elapsed time stays at the observation shown. L2 sequence errors are reported counters, not dataset certification.' : 'Live integration unverified. Current run values remain unpublished. The documented research capture is separate below.';
 }
 
 /** @param {Request|Response} message @param {number} limit */
@@ -107,7 +108,7 @@ if (typeof document !== 'undefined') {
       controller = new AbortController();
       const timeout = setTimeout(() => controller?.abort(), 5000);
       try {
-        const response = await fetch('/monitoring/collector-public.json', { cache: 'no-cache', credentials: 'omit', mode: 'same-origin', redirect: 'error', signal: controller.signal });
+        const response = await fetch('/api/collector-public/', { cache: 'no-cache', credentials: 'omit', mode: 'same-origin', redirect: 'error', signal: controller.signal });
         if (!response.ok || Number(response.headers.get('content-length')) > 4096) throw new Error('Unavailable');
         const data = publicSnapshot(await boundedJson(response, 4096));
         if (!forwardObservation(last, data)) throw new Error('Regressive observation');

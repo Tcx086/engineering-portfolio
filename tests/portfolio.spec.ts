@@ -55,7 +55,7 @@ test('technical details are optional and keyboard accessible', async ({ page }) 
 });
 
 const collectorPath = '/projects/microstructure-discovery-factory/';
-const snapshotPath = '**/monitoring/collector-public.json';
+const snapshotPath = '**/api/collector-public/';
 function liveFixture() {
   const timestamp = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   return { schemaVersion: 1, mode: 'live', preparedAt: timestamp, observedAt: timestamp, runId: 'public-test-campaign', collectorState: 'collecting', elapsedSeconds: 75, tradesPersisted: 1234, l2Persisted: 456, sequenceErrors: 0, campaignResult: 'pending', lastRunSummary: 'Test fixture: approved public observation.' };
