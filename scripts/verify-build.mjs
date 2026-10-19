@@ -53,7 +53,9 @@ assert.ok((await stat(join(root, 'og.png'))).size > 1000, 'Raster Open Graph ima
 const resume = JSON.parse(await readFile('src/lib/resume.json', 'utf8'));
 const resumeArtifacts = JSON.parse(await readFile('src/lib/resume-artifacts.json', 'utf8'));
 for (const [key, path] of Object.entries({ source: 'src/lib/resume.json', txt: 'build/tom-chen-resume.txt', pdf: 'build/tom-chen-resume.pdf' })) {
-  assert.equal(createHash('sha256').update(await readFile(path)).digest('hex'), resumeArtifacts[key], `Stale resume ${key}; run scripts/generate-resume.py`);
+  const bytes = await readFile(path);
+  const content = key === 'pdf' ? bytes : bytes.toString('utf8').replaceAll('\r\n', '\n');
+  assert.equal(createHash('sha256').update(content).digest('hex'), resumeArtifacts[key], `Stale resume ${key}; run scripts/generate-resume.py`);
 }
 const resumeHtml = await readFile(join(root, 'resume/index.html'), 'utf8');
 const resumeTxt = await readFile(join(root, 'tom-chen-resume.txt'), 'utf8');

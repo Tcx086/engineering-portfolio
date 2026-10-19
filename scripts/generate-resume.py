@@ -59,7 +59,7 @@ paragraph(resume["education"]["credential"])
 section("HOBBY")
 paragraph(resume["hobby"])
 lines.extend(["EDUCATION", resume["education"]["school"], resume["education"]["credential"], "", "HOBBY", resume["hobby"], ""])
-txt_path.write_text("\n".join(lines), encoding="utf-8")
+txt_path.write_text("\n".join(lines), encoding="utf-8", newline="\n")
 document = SimpleDocTemplate(str(pdf_path), pagesize=letter, leftMargin=36, rightMargin=36, topMargin=30, bottomMargin=30, title="Tom Chen - Engineering Resume", author="Tom Chen", invariant=1)
 document.build(story)
 
@@ -73,6 +73,6 @@ for fact in facts:
     assert " ".join(fact.split()) in extracted, f"PDF missing fact: {fact}"
 assert all(term not in extracted for term in ["CCC Motors", "Hull Chrysler", "Boba Green", "linkedin.com"])
 assert all(ord(char) < 128 for char in "\n".join(lines)), "Keep the ATS resume text ASCII"
-manifest = {"source": sha256(source.read_bytes()).hexdigest(), "pdf": sha256(pdf_path.read_bytes()).hexdigest(), "txt": sha256(txt_path.read_bytes()).hexdigest()}
+manifest = {"source": sha256(source.read_text(encoding="utf-8").encode("utf-8")).hexdigest(), "pdf": sha256(pdf_path.read_bytes()).hexdigest(), "txt": sha256(txt_path.read_bytes()).hexdigest()}
 (ROOT / "src/lib/resume-artifacts.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 print(json.dumps({"pages": 1, "verifiedFacts": len(facts), "pdfBytes": pdf_path.stat().st_size, "source": "one public-safe JSON source"}))
