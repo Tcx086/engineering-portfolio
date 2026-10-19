@@ -25,7 +25,7 @@
   <div class="article-body resume-body">
     <section><h2>Profile</h2><p>{resume.profile}</p></section>
     <section><h2>Engineering experience</h2>{#each resume.experience as item}<h3>{item.name}</h3><p class="resume-role">{item.role}<br />{item.dates}</p><ul>{#each item.bullets as bullet}<li>{bullet}</li>{/each}</ul>{/each}</section>
-    <section><h2>Selected independent projects</h2>{#each resume.projects.filter((project) => project.concise) as item}<h3>{item.name}</h3><p class="resume-role">{item.role}<br />{item.dates}</p><ul>{#each item.bullets as bullet}<li>{bullet}</li>{/each}</ul>{/each}</section>
+    <section><h2>Independent projects</h2>{#each resume.projects.filter((project) => project.concise) as item}<h3>{item.name}</h3><p class="resume-role">{item.role}<br />{item.dates}</p><ul>{#each item.bullets as bullet}<li>{bullet}</li>{/each}</ul>{/each}</section>
     <section><h2>Volunteer experience</h2><h3>{resume.volunteer.name}</h3><p class="resume-role">{resume.volunteer.role}<br />{resume.volunteer.dates}</p><ul>{#each resume.volunteer.bullets as bullet}<li>{bullet}</li>{/each}</ul></section>
     <section><h2>Education</h2><p><strong>{resume.education.school}</strong><br />{resume.education.credential}</p></section>
     <section><h2>HOBBY</h2><p>{resume.hobby}</p></section>
