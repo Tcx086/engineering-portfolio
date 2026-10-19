@@ -21,7 +21,7 @@
   {#if data.project.slug === 'microstructure-discovery-factory'}<PublicMonitor />{/if}
   <div class="article-body">
     <section class="project-results" aria-labelledby="project-results">
-      <h2 id="project-results">{data.project.diagram === 'capture' ? 'Documented capture evidence' : 'What I can demonstrate'}</h2><p>{data.project.result}</p>
+      <h2 id="project-results">{data.project.diagram === 'capture' ? 'Documented Research Capture' : 'What I can demonstrate'}</h2><p>{data.project.result}</p>
       {#if data.project.slug === 'microstructure-discovery-factory'}<CaptureEvidence />{/if}
     </section>
   </div>

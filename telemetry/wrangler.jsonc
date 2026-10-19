@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-public-telemetry-preview",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-18",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "vars": { "PUBLISH_ENABLED": "false", "LIVE_VERIFIED": "false" },
+  "d1_databases": [{ "binding": "DB", "database_name": "portfolio-public-telemetry-preview", "database_id": "2a7be382-4207-4a7d-bfdd-d3dcdd467584" }],
+  "ratelimits": [
+    { "name": "READ_LIMIT", "namespace_id": "140101", "simple": { "limit": 30, "period": 60 } },
+    { "name": "WRITE_LIMIT", "namespace_id": "140102", "simple": { "limit": 6, "period": 60 } }
+  ],
+  "observability": { "enabled": true, "head_sampling_rate": 0.1, "logs": { "enabled": true, "invocation_logs": false } }
+}
