@@ -8,6 +8,7 @@
 </script>
 
 <svelte:head>
+  <link rel="preload" href="/fonts/poiret-one-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
   <title>{meta.title} — Tom Chen</title>
   <meta name="description" content={meta.description} />
   <link rel="canonical" href={`${site.url}${page.url.pathname}`} />
@@ -23,7 +24,7 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header wrap">
-  <a href="/" class="brand" aria-label="Tom Chen home"><span class="brand-mark">tc<span>_</span></span><span>Tom Chen<span class="brand-sub">ENGINEERING PORTFOLIO</span></span></a>
+  <a href="/" class="brand" aria-label="Tom Chen home"><span class="brand-mark" aria-hidden="true">TC</span><span>Tom Chen<span class="brand-sub">ENGINEERING PORTFOLIO</span></span></a>
   <nav aria-label="Main navigation">{#each nav as item}<a href={item.href} aria-current={page.url.pathname.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>{/each}<a class="nav-contact" href="/contact/" aria-current={page.url.pathname === '/contact/' ? 'page' : undefined}>Let’s talk <span aria-hidden="true">↗</span></a></nav>
 </header>
 <main id="main" class="wrap" tabindex="-1">{@render children()}</main>
