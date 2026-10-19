@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LinkArrow from '#lib/LinkArrow.svelte';
   import type { PageData } from './$types';
   import ArticleSections from '#lib/ArticleSections.svelte';
   import Diagram from '#lib/Diagram.svelte';
@@ -15,7 +16,7 @@
     <h1>{data.project.name}</h1>
     <p class="article-deck">{data.project.summary}</p>
     <p class="role-line">{data.project.role}</p>
-    {#if data.project.link}<a class="text-link" href={data.project.link.href}>{data.project.link.label} <span aria-hidden="true">↗</span></a>{/if}
+    {#if data.project.link}<a class="text-link" href={data.project.link.href}>{data.project.link.label} <span aria-hidden="true"><LinkArrow /></span></a>{/if}
   </div>
   <ArticleSections sections={data.project.sections} />
   {#if data.project.slug === 'microstructure-discovery-factory'}<PublicMonitor />{/if}
@@ -44,7 +45,7 @@
     <section class="scope-note" aria-labelledby="current-scope"><h2 id="current-scope">Current scope</h2><p>{data.project.limitations}</p></section>
   </div>
   <div class="article-end">
-    {#if data.project.link}<a class="button" href={data.project.link.href}>{data.project.link.label} <span aria-hidden="true">↗</span></a>{:else}<a class="button" href="/contact/">Talk about this work <span aria-hidden="true">↗</span></a>{/if}
+    {#if data.project.link}<a class="button" href={data.project.link.href}>{data.project.link.label} <span aria-hidden="true"><LinkArrow /></span></a>{:else}<a class="button" href="/contact/">Talk about this work <span aria-hidden="true"><LinkArrow /></span></a>{/if}
     <a class="text-link" href="/projects/">Back to projects <span aria-hidden="true">→</span></a>
   </div>
 </article>
