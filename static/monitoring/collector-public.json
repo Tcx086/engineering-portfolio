@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "mode": "snapshot",
+  "preparedAt": "2026-10-19T00:52:14Z",
+  "observedAt": null,
+  "runId": null,
+  "collectorState": "not_published",
+  "elapsedSeconds": null,
+  "tradesPersisted": null,
+  "l2Persisted": null,
+  "sequenceErrors": null,
+  "campaignResult": "not_published",
+  "lastRunSummary": "One documented FOMC capture completed 12/12 lanes. Its recorded trades, order-book updates and depth findings are retained below."
+}

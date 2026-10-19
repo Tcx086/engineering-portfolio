@@ -3,6 +3,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { createHash } from 'node:crypto';
+import { publicSnapshot } from '../src/lib/public-monitor.mjs';
 
 const root = resolve('build');
 async function files(directory) {
@@ -26,7 +27,12 @@ for (const file of htmlFiles) {
   assert.match(html, /rel="canonical"/);
   assert.match(html, /property="og:image"/);
   assert.equal((html.match(/<h1(?:\s|>)/g) ?? []).length, 1, `One h1 per page: ${file}`);
-  assert.doesNotMatch(html, /<script[^>]+src=/, `Static pages must not load client JavaScript: ${file}`);
+  const scripts = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(match => match[1]);
+  if (file.endsWith(join('microstructure-discovery-factory', 'index.html'))) {
+    assert.equal(scripts.length, 1, 'Only the isolated public monitor module is loaded');
+    assert.match(scripts[0], /\/_app\/immutable\/assets\/public-monitor\.[\w-]+\.mjs$/);
+    assert.ok((await stat(join(root, scripts[0]))).size < 9000, 'Public monitor module budget: 9 KB');
+  } else assert.equal(scripts.length, 0, `Other pages load no client JavaScript: ${file}`);
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
   assert.equal(new Set(ids).size, ids.length, `Duplicate IDs: ${file}`);
   for (const [, href] of html.matchAll(/\bhref="([^"]+)"/g)) {
@@ -50,6 +56,10 @@ assert.equal((sitemap.match(/<loc>/g) ?? []).length, 12);
 assert.match(await readFile(join(root, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/portfolio\.tcx086\.com\/sitemap\.xml/);
 assert.ok(!allFiles.some((file) => file.endsWith('_worker.js')), 'No server runtime');
 assert.ok((await stat(join(root, 'og.png'))).size > 1000, 'Raster Open Graph image exists');
+const snapshot = publicSnapshot(JSON.parse(await readFile(join(root, 'monitoring/collector-public.json'), 'utf8')));
+assert.ok((await stat(join(root, 'monitoring/collector-public.json'))).size < 4096);
+assert.match(await readFile(join(root, 'projects/microstructure-discovery-factory/index.html'), 'utf8'), /Read-only \/ Public monitoring/);
+assert.equal(snapshot.mode, 'snapshot', 'This release has no approved live collector feed');
 const resume = JSON.parse(await readFile('src/lib/resume.json', 'utf8'));
 const resumeArtifacts = JSON.parse(await readFile('src/lib/resume-artifacts.json', 'utf8'));
 for (const [key, path] of Object.entries({ source: 'src/lib/resume.json', txt: 'build/tom-chen-resume.txt', pdf: 'build/tom-chen-resume.pdf', fullPdf: 'build/tom-chen-master-resume-public.pdf' })) {
@@ -74,4 +84,4 @@ assert.equal(resume.projects.length, 6, 'Full resume includes all six v4.4 proje
 assert.equal(resumeArtifacts.fullPages, 3);
 assert.ok(resumeHtml.indexOf('href="/tom-chen-master-resume-public.pdf"') < resumeHtml.indexOf('href="/tom-chen-resume.pdf"'), 'Full resume is the primary download');
 for (const [email] of resumeTxt.matchAll(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi)) assert.equal(email, resume.email);
-console.log(JSON.stringify({ routes: 12, htmlFiles: htmlFiles.length, internalLinksChecked: links, maximumHtmlGzipBytes: maximumPageBytes, totalCssGzipBytes: cssBytes, privacyScan: 'passed', resumeConsistency: 'HTML/TXT facts and both generated PDF hashes verified', runtime: 'static; no client JavaScript loaded' }, null, 2));
+console.log(JSON.stringify({ routes: 12, htmlFiles: htmlFiles.length, internalLinksChecked: links, maximumHtmlGzipBytes: maximumPageBytes, totalCssGzipBytes: cssBytes, privacyScan: 'passed; public snapshot allowlist verified', resumeConsistency: 'HTML/TXT facts and both generated PDF hashes verified', runtime: 'static; one isolated read-only monitor module on the collector page' }, null, 2));

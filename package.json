@@ -10,7 +10,7 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "test": "node scripts/verify-build.mjs",
+    "test": "node --test scripts/public-monitor.test.mjs && node scripts/verify-build.mjs",
     "test:browser": "playwright test"
   },
   "devDependencies": {
