@@ -21,15 +21,15 @@ npm run preview -- --port 4173
 npm run test:browser
 ```
 
-The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, full/concise PDF and TXT downloads, native expandable technical sections and basic resource budgets. It saves representative screenshots in ignored `test-results/`. `PORTFOLIO_BASE_URL` runs the same suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification.
+The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, full/concise PDF and TXT downloads, native expandable technical sections and basic resource budgets. Public-monitor checks cover active-format test fixtures, refresh, delayed observations, HTTP failure, rejected private fields and JavaScript-disabled fallback. Reduced-motion checks save both architecture and source-landscape screenshots. `PORTFOLIO_BASE_URL` runs the suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification. Restart the preview server after rebuilding to reload its asset manifest.
 
 ## Architecture
 
 - SvelteKit 3 + Svelte 5 + TypeScript, Tailwind CSS 4.
 - `@sveltejs/adapter-static` prerenders the site into `build/`.
-- `csr = false`: visitors receive complete HTML; no client JavaScript is loaded.
+- `csr = false`: visitors receive complete HTML. Only the Microstructure page loads one native ES module for the read-only public monitor; other routes load no client JavaScript. There is no Svelte hydration runtime.
 - Typed content in `src/lib/content.ts`; shared layout, responsive process diagrams and native expandable technical sections.
-- No database, authentication, third-party fonts, analytics or runtime API calls.
+- No database, authentication, third-party fonts or analytics. The monitor's only runtime request is a same-origin static JSON artifact; it never contacts the collector or a private service.
 - Vercel serves the static `build/` output; Cloudflare manages the portfolio subdomain's DNS. `vercel.json` supplies security headers and static hosting settings; `404.html` provides a real static error page. `_headers` retains equivalent Cloudflare-compatible headers.
 - Sitemap, robots, canonical URLs and Open Graph metadata are included. The original `static/og.svg` and its raster export `static/og.png` are checked in together.
 
@@ -74,6 +74,18 @@ Content is based on the approved owner brief, reviewed private engineering docum
 - There is no CS degree, institutional quant employment, audited trading return or autonomous multi-agent product claim.
 
 The build verification includes a focused public-output privacy scan. Also inspect source changes manually before publication: no pattern-based scan can identify every confidential statement.
+
+## Public monitor publication contract
+
+The v1.3 release is **snapshot-based**, with a small progressive-enhancement poller. No approved live collector feed or sanitized exporter is connected. `static/monitoring/collector-public.json` contains manually reviewed public fields only, derived from the approved documented FOMC account. Current run ID, elapsed time, persisted counters, observation time and sequence-error count are null; null renders as **Not published**, never zero. Existing FOMC capture figures remain a separate documented-evidence section and are not labeled as current or persisted counters.
+
+The complete exposed field list is `schemaVersion`, `mode`, `preparedAt`, `observedAt`, `runId`, `collectorState`, `elapsedSeconds`, `tradesPersisted`, `l2Persisted`, `sequenceErrors`, `campaignResult`, and `lastRunSummary`. `preparedAt` is the public artifact preparation time, not a collector observation or capture date. `observedAt` must be an actual observation time when supplied. Public run aliases must start with `public-`; enums and nonnegative safe-integer counters are validated. No hostnames, endpoints, filesystem paths, raw logs, secrets or operational topology are accepted as fields. Summaries require manual factual/privacy review in addition to the checks.
+
+`src/lib/public-monitor.mjs` is shared by build verification and the browser's small asset. Its parser rejects unknown keys, missing fields, malformed timestamps, unsafe values and common private diagnostic strings. The browser uses text insertion, GET only, omitted credentials, no redirects and no external origin. It checks every 30 seconds while visible, permits one request at a time and aborts after five seconds. Failed or invalid responses retain the last valid display with an explicit refresh-unavailable state. Old observations are labeled delayed. No fake counter or elapsed-time animation is used; the complete HTML snapshot and native disclosure work without JavaScript.
+
+To publish an update, deliberately select and review each allowed value, edit the public artifact, run checks and inspect a preview. Never copy an internal monitoring response or raw logs into this file. A real live integration remains separate work requiring an approved sanitized exporter; the current release's snapshot-mode guard must be revisited along with that evidence. No private endpoint, proxy, access rule or upstream service was created or changed.
+
+The architecture views are original semantic HTML/CSS diagrams. Microstructure shows exchange feeds, WebSocket collection, normalization, storage, validation/reconciliation and replay/research, with a monitoring/lifecycle band across the pipeline. Situation Monitor shows six categorical source inputs and a five-stage processing/history/presentation flow. They describe responsibilities, not operational topology or live source health. The original skyline linework and share image use no licensed character or movie artwork.
 
 ## Full resume provenance and layout
 

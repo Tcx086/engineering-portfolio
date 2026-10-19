@@ -3,6 +3,8 @@
   import ArticleSections from '#lib/ArticleSections.svelte';
   import Diagram from '#lib/Diagram.svelte';
   import CaptureEvidence from '#lib/CaptureEvidence.svelte';
+  import PublicMonitor from '#lib/PublicMonitor.svelte';
+  import SourceLandscape from '#lib/SourceLandscape.svelte';
   let { data }: { data: PageData } = $props();
 </script>
 
@@ -16,12 +18,21 @@
     {#if data.project.link}<a class="text-link" href={data.project.link.href}>{data.project.link.label} <span aria-hidden="true">↗</span></a>{/if}
   </div>
   <ArticleSections sections={data.project.sections} />
-  {#if data.project.diagram}<div class="article-diagram"><Diagram kind={data.project.diagram} /></div>{/if}
+  {#if data.project.slug === 'microstructure-discovery-factory'}<PublicMonitor />{/if}
   <div class="article-body">
     <section class="project-results" aria-labelledby="project-results">
-      <h2 id="project-results">What I can demonstrate</h2><p>{data.project.result}</p>
+      <h2 id="project-results">{data.project.diagram === 'capture' ? 'Documented capture evidence' : 'What I can demonstrate'}</h2><p>{data.project.result}</p>
       {#if data.project.slug === 'microstructure-discovery-factory'}<CaptureEvidence />{/if}
     </section>
+  </div>
+  {#if data.project.diagram}
+    <section class="project-visual" aria-labelledby="system-overview">
+      <div class="visual-intro"><p class="eyebrow">System overview</p><h2 id="system-overview">{data.project.diagram === 'capture' ? 'How the collection system fits together.' : 'How different sources become market context.'}</h2><p>{data.project.diagram === 'capture' ? 'Collectors receive the data. Each later stage makes it easier to store, check and revisit an event. This is a public overview of the system, without private deployment details.' : 'Situation Monitor organizes different kinds of information before presenting them together. These categories describe the project’s coverage model; availability varies by provider.'}</p></div>
+      {#if data.project.diagram === 'context'}<SourceLandscape />{/if}
+      <Diagram kind={data.project.diagram} />
+    </section>
+  {/if}
+  <div class="article-body">
     <section aria-labelledby="project-tools"><h2 id="project-tools">Tools used</h2><p>{data.project.tools}</p><div class="tags">{#each data.project.tags as tag}<span>{tag}</span>{/each}</div></section>
     <section class="technical-section" aria-labelledby="technical-details">
       <h2 id="technical-details">Engineering details</h2>

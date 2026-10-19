@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" fill="none">
+  <defs><linearGradient id="steel" x1="700" y1="30" x2="700" y2="620" gradientUnits="userSpaceOnUse"><stop stop-color="#77bfd0" stop-opacity=".24"/><stop offset="1" stop-color="#77bfd0" stop-opacity=".025"/></linearGradient></defs>
+  <g stroke="url(#steel)" stroke-width="1">
+    <path d="M460 620V290h30v-40h45v-42h76v42h45v370M682 620V165h27v-40h30V83h18V45h14v38h18v42h30v40h27v455M877 620V328h39v-41h55v-30h53v30h55v41h39v292"/>
+    <path d="M502 620V318h112v302M724 620V185h81v435M938 620V354h114v266M743 202v389m43-389v389M519 338v253m78-253v253M955 377v214m80-214v214"/>
+    <path d="M440 591h724M432 563h724M420 620V431h-57v-48h-88v48h-57v189M270 450h96v170M1153 620V398h47M757 45V13m-40 111h94M670 165h188M447 290h221"/>
+    <path d="M0 620h1200M0 112h1200M0 138h1200M180 0v620M1000 0v620" stroke-dasharray="2 12"/>
+  </g>
+  <path d="M1181 24h-70m70 0v70M205 596h70m-70 0v-70" stroke="#cfb88a" stroke-opacity=".4"/>
+</svg>

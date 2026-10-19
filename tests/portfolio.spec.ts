@@ -14,7 +14,7 @@ for (const route of routes) {
     expect(errors).toEqual([]);
     const a11y = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     expect(a11y.violations).toEqual([]);
-    expect(await page.locator('script[src]').count()).toBe(0);
+    expect(await page.locator('script[src]').count()).toBe(route === '/projects/microstructure-discovery-factory/' ? 1 : 0);
   });
 }
 test('keyboard navigation, project links and resume download work', async ({ page }) => {
@@ -44,7 +44,7 @@ test('keyboard navigation, project links and resume download work', async ({ pag
 });
 test('technical details are optional and keyboard accessible', async ({ page }) => {
   await page.goto('/projects/microstructure-discovery-factory/');
-  const detail = page.locator('details').first();
+  const detail = page.locator('details.technical-detail').first();
   const content = detail.getByText(/The pipeline separates/);
   await expect(content).toBeHidden();
   await detail.locator('summary').focus();
@@ -52,6 +52,73 @@ test('technical details are optional and keyboard accessible', async ({ page }) 
   await expect(content).toBeVisible();
   const a11y = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
   expect(a11y.violations).toEqual([]);
+});
+
+const collectorPath = '/projects/microstructure-discovery-factory/';
+const snapshotPath = '**/monitoring/collector-public.json';
+function liveFixture() {
+  const timestamp = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+  return { schemaVersion: 1, mode: 'live', preparedAt: timestamp, observedAt: timestamp, runId: 'public-test-campaign', collectorState: 'collecting', elapsedSeconds: 75, tradesPersisted: 1234, l2Persisted: 456, sequenceErrors: 0, campaignResult: 'pending', lastRunSummary: 'Test fixture: approved public observation.' };
+}
+test('public monitor accepts reviewed live data and refreshes without overlapping requests', async ({ page }) => {
+  let requests = 0;
+  const methods: string[] = [];
+  await page.clock.install();
+  await page.route(snapshotPath, async route => { requests++; methods.push(route.request().method()); await route.fulfill({ json: { ...liveFixture(), tradesPersisted: requests * 1234 } }); });
+  await page.goto(collectorPath);
+  await expect(page.getByRole('status')).toHaveText('Live public data');
+  await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toHaveText('1,234');
+  await expect(page.locator('[data-monitor-field="sequenceErrors"]')).toHaveText('0');
+  await page.clock.fastForward(30_000);
+  await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toHaveText('2,468');
+  expect(methods).toEqual(['GET', 'GET']);
+});
+test('public monitor keeps its server-rendered fallback when refresh fails', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.route(snapshotPath, route => route.fulfill({ status: 503, body: '' }));
+  await page.goto(collectorPath);
+  await expect(page.getByRole('status')).toHaveText('Refresh unavailable · data retained');
+  await expect(page.locator('[data-monitor-summary]')).toContainText('12/12 lanes');
+  await page.locator('.monitor-telemetry summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('[data-monitor-field="sequenceErrors"]')).toHaveText('Not published');
+  expect(errors).toEqual([]);
+});
+test('public monitor rejects private fields and keeps delayed observations honest', async ({ page }) => {
+  await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), hostname: 'PRIVATE_TEST_VALUE' } }));
+  await page.goto(collectorPath);
+  await expect(page.getByRole('status')).toHaveText('Refresh unavailable · data retained');
+  await expect(page.locator('body')).not.toContainText('PRIVATE_TEST_VALUE');
+  await page.unroute(snapshotPath);
+  await page.route(snapshotPath, route => route.fulfill({ json: { ...liveFixture(), observedAt: new Date(Date.now() - 180000).toISOString().replace(/\.\d{3}Z$/, 'Z') } }));
+  await page.reload();
+  await expect(page.getByRole('status')).toHaveText('Delayed public data');
+});
+test.describe('monitor without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+  test('retained evidence and native telemetry disclosure still work', async ({ page }) => {
+    await page.goto(collectorPath);
+    await expect(page.getByRole('status')).toHaveText('Snapshot only');
+    await expect(page.locator('[data-monitor-summary]')).toContainText('12/12 lanes');
+    await page.locator('.monitor-telemetry summary').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toBeVisible();
+    await expect(page.locator('[data-monitor-field="tradesPersisted"]')).toHaveText('Not published');
+  });
+});
+test('architecture and source views stay readable with reduced motion', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(collectorPath);
+  await expect(page.locator('.capture-architecture .process-flow > li')).toHaveCount(6);
+  await expect(page.getByText('Monitoring & lifecycle control', { exact: true })).toBeVisible();
+  const motion = await page.locator('.public-monitor').evaluate(el => getComputedStyle(el).animationName);
+  expect(motion).toBe('none');
+  await page.locator('.public-monitor').screenshot({ path: `test-results/monitor-${testInfo.project.name}.png` });
+  await page.locator('.capture-architecture').screenshot({ path: `test-results/architecture-${testInfo.project.name}.png` });
+  await page.goto('/projects/market-context-engine/');
+  await expect(page.locator('.source-landscape article')).toHaveCount(6);
+  await page.locator('.project-visual').screenshot({ path: `test-results/sources-${testInfo.project.name}.png` });
 });
 test('representative rendering and basic resource budget', async ({ page }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
