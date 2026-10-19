@@ -1,4 +1,4 @@
-import { timingSafeEqual } from 'node:crypto';
+import { verify } from 'node:crypto';
 import { publicSnapshot, boundedJson, forwardObservation } from '../src/lib/public-monitor.mjs';
 
 export const READ_SQL = 'SELECT payload FROM public_observation WHERE id = 1';
@@ -13,11 +13,10 @@ AND json_extract(excluded.payload, '$.l2Persisted') >= json_extract(public_obser
 AND json_extract(excluded.payload, '$.sequenceErrors') >= json_extract(public_observation.payload, '$.sequenceErrors')
 AND json_extract(excluded.payload, '$.elapsedSeconds') >= json_extract(public_observation.payload, '$.elapsedSeconds')))`;
 
-function authorized(request, secret) {
+function authorized(request, data, publicKey) {
   const value = request.headers.get('authorization') ?? '';
-  if (typeof secret !== 'string' || secret.length < 32 || value.length !== secret.length + 7) return false;
-  const received = new TextEncoder().encode(value), expected = new TextEncoder().encode(`Bearer ${secret}`);
-  return received.byteLength === expected.byteLength && timingSafeEqual(received, expected);
+  if (typeof publicKey !== 'string' || !/^Signature [A-Za-z0-9+/]{86}==$/.test(value)) return false;
+  return verify(null, Buffer.from(JSON.stringify(data)), publicKey, Buffer.from(value.slice(10), 'base64'));
 }
 
 export default {
@@ -39,14 +38,17 @@ export default {
         if (!row) return reply(503, { error: 'No public observation published' });
         const data = publicSnapshot(JSON.parse(row.payload));
         if (data.mode === 'live' && env.LIVE_VERIFIED !== 'true') return reply(503, { error: 'Live integration unverified' });
+        if (data.mode === 'observed' && env.LIVE_VERIFIED === 'true') data.mode = 'live';
         return reply(200, data);
       }
-      if (!authorized(request, env.PUBLISH_TOKEN)) return reply(401, { error: 'Unauthorized' });
-      if (env.PUBLISH_ENABLED !== 'true') return reply(503, { error: 'Publisher disabled' });
       if (request.headers.get('content-type')?.split(';')[0] !== 'application/json') return reply(415, { error: 'JSON required' });
       let data;
-      try { data = publicSnapshot(await boundedJson(request, 4096)); } catch { return reply(400, { error: 'Invalid public observation' }); }
+      try { data = await boundedJson(request, 4096); } catch { return reply(400, { error: 'Invalid public observation' }); }
+      if (!authorized(request, data, env.PUBLISH_PUBLIC_KEY)) return reply(401, { error: 'Unauthorized' });
+      if (env.PUBLISH_ENABLED !== 'true') return reply(503, { error: 'Publisher disabled' });
+      try { data = publicSnapshot(data); } catch { return reply(400, { error: 'Invalid public observation' }); }
       if (data.mode === 'snapshot' || !['elapsedSeconds', 'tradesPersisted', 'l2Persisted', 'sequenceErrors'].every(key => data[key] !== null)) return reply(400, { error: 'Complete observed counters required' });
+      if (env.ACCEPT_MODE && data.mode !== env.ACCEPT_MODE) return reply(409, { error: 'Publication mode not permitted' });
       if (data.mode === 'live' && env.LIVE_VERIFIED !== 'true') return reply(409, { error: 'Live integration unverified' });
       const now = Date.now();
       if (now - Date.parse(data.observedAt) > 90_000 || Date.parse(data.observedAt) > now) return reply(400, { error: 'Observation outside accepted window' });

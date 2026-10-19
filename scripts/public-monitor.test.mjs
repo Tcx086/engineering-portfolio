@@ -24,6 +24,7 @@ test('live observations format actual values including a genuine zero', () => {
   assert.equal(monitorStatus(data, now + 181000), 'STALE / DATA DELAYED');
   assert.equal(monitorStatus({ ...data, collectorState: 'stopped' }, now), 'STOPPED');
   assert.equal(monitorStatus({ ...data, mode: 'synthetic' }, now), 'Synthetic test data · NOT LIVE');
+  assert.equal(monitorStatus({ ...data, mode: 'observed' }, now), 'Observed · live verification pending');
 });
 test('old observations and regressing persisted counters cannot replace verified data', () => {
   const data = publicSnapshot(active());

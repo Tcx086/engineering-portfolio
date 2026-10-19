@@ -1,9 +1,11 @@
 // Synthetic only. Never loaded by the portfolio or installed on a collector.
 export function dashboardFixture(now = Date.now(), counter = 100) {
   const at = new Date(now).toISOString();
-  const lanes = ['binance', 'okx', 'bybit'].flatMap(venue => ['BTCUSDT', 'ETHUSDT'].map(symbol => ({ venue, symbol, persisted: counter, sequence_mismatches: 0 })));
+  const lanes = ['binance', 'okx'].flatMap(venue => ['BTCUSDT', 'ETHUSDT'].map(symbol => ({ venue, symbol, persisted: counter, sequence_mismatches: 0 })));
+  const run = { run_id: 'PRIVATE_TEST_RUN', status: 'RUNNING', start: new Date(now - 60_000).toISOString(), elapsed_ms: 60_000, readiness_result: 'UNKNOWN' };
   return { schema_version: 'collector-dashboard-v1', read_only: true,
-    run: { run_id: 'PRIVATE_TEST_RUN', status: 'RUNNING', start: new Date(now - 60_000).toISOString() },
+    run, active_run: run, service_state: 'ONLINE', freshness: { collector_process: { timestamp: at, state: 'FRESH' } },
+    v2_observation: { raw_landing: { state: 'AVAILABLE', products: [...lanes.map(l=>({ ...l, product: 'TRADE' })), ...['BTC','ETH'].map(symbol=>({venue:'deribit',symbol,product:'OPTION_TRADE',persisted:counter}))] } },
     sources: { telemetry: { captured_at: at }, status: { captured_at: at } }, l2_lanes: lanes, trade_lanes: lanes,
     run_root: '/PRIVATE_TEST_PATH', logs: ['PRIVATE_TEST_LOG'] };
 }
