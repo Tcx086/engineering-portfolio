@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LinkArrow from '#lib/LinkArrow.svelte';
   import '../app.css';
   import { page } from '$app/state';
   import { site, pageMeta } from '#lib/content.ts';
@@ -25,7 +26,7 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header wrap">
   <a href="/" class="brand" aria-label="Tom Chen home"><span class="brand-mark" aria-hidden="true">TC</span><span>Tom Chen<span class="brand-sub">ENGINEERING PORTFOLIO</span></span></a>
-  <nav aria-label="Main navigation">{#each nav as item}<a href={item.href} aria-current={page.url.pathname.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>{/each}<a class="nav-contact" href="/contact/" aria-current={page.url.pathname === '/contact/' ? 'page' : undefined}>Let’s talk <span aria-hidden="true">↗</span></a></nav>
+  <nav aria-label="Main navigation">{#each nav as item}<a href={item.href} aria-current={page.url.pathname.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>{/each}<a class="nav-contact" href="/contact/" aria-current={page.url.pathname === '/contact/' ? 'page' : undefined}>Let’s talk <span aria-hidden="true"><LinkArrow /></span></a></nav>
 </header>
 <main id="main" class="wrap" tabindex="-1">{@render children()}</main>
-<footer class="site-footer wrap"><a href="/" class="footer-name">Tom Chen<span>Backend, data & market systems.</span></a><div><a href={site.github}>GitHub <span aria-hidden="true">↗</span></a><a href={`mailto:${site.email}`}>Email <span aria-hidden="true">↗</span></a><span class="footer-year">© 2026 Tom Chen</span></div></footer>
+<footer class="site-footer wrap"><a href="/" class="footer-name">Tom Chen<span>Backend, data & market systems.</span></a><div><a href={site.github}>GitHub <span aria-hidden="true"><LinkArrow /></span></a><a href={`mailto:${site.email}`}>Email <span aria-hidden="true"><LinkArrow /></span></a><span class="footer-year">© 2026 Tom Chen</span></div></footer>
