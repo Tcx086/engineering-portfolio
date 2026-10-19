@@ -23,7 +23,8 @@ export function sanitizeDashboard(source, aliasKey, now = Date.now()) {
   const elapsed = (active ?? source.last_run)?.elapsed_ms;
   if (!Number.isFinite(elapsed) || elapsed < 0) throw new Error('Run start unconfirmed');
   const sum = (lanes, key) => lanes.reduce((total, lane) => total + lane[key], 0);
-  return publicSnapshot({ schemaVersion: 1, mode: 'observed', preparedAt: iso(now), observedAt: iso(observed),
+  // This provisional time accommodates source clock skew; ingestion assigns the public publication time.
+  return publicSnapshot({ schemaVersion: 1, mode: 'observed', preparedAt: iso(Math.max(now, observed)), observedAt: iso(observed),
     runId: `public-${createHmac('sha256', aliasKey).update(source.run.run_id).digest('hex').slice(0, 20)}`,
     collectorState: state, elapsedSeconds: Math.floor(elapsed / 1000), tradesPersisted: sum(trades, 'persisted'),
     l2Persisted: sum(l2, 'persisted'), sequenceErrors: sum(l2, 'sequence_mismatches'),

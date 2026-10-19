@@ -43,6 +43,13 @@ test('disabled exporter performs no source read or outbound request', async () =
   const result = await publishOnce({}, () => assert.fail('Disabled exporter made a request'));
   assert.equal(result.state, 'disabled');
 });
+test('bounded source clock skew preserves the genuine observation timestamp', () => {
+  const now = Date.now(), source = dashboardFixture(now + 2000);
+  const data = sanitizeDashboard(source, token, now);
+  assert.equal(data.observedAt, new Date(now + 2000).toISOString().replace(/\.\d{3}Z$/, 'Z'));
+  assert.equal(data.preparedAt, data.observedAt);
+  assert.throws(() => sanitizeDashboard(dashboardFixture(now + 16000), token, now), /stale/);
+});
 test('exporter reads one bounded projection and sends only its sanitized payload', async () => {
   const requests = [];
   const transport = async (url, options) => {
