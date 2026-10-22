@@ -190,7 +190,7 @@ export const notes: Note[] = [
   },
   {
     slug: 'ubuntu-update-stopped-market-data-collector', number: '03',
-    title: 'The Ubuntu Update That Stopped My Market Data Collector', category: 'Systems reliability',
+    title: 'The Ubuntu Update That Stopped My Market Data Collector', category: 'Systems reliability · 5 min read',
     summary: 'An unattended Ubuntu update restarted acquisition services during a live campaign. The interruption exposed a gap between application safeguards and host maintenance.',
     takeaway: 'Operational reliability depends on coordinating application and host lifecycle behavior. Protect a bounded collection window, then let normal maintenance resume.',
     sections: [
@@ -203,7 +203,7 @@ export const notes: Note[] = [
         'Historical certification evidence was retained. A failed or uncertified run stayed failed or uncertified, even where explicit recovery could finish permitted work on already captured data. Restarting acquisition was not allowed to erase the original interruption or extend its deadline.'
       ] },
       { title: 'A finite window for collection', paragraphs: [
-        'The maintenance policy introduced bounded protection around registered acquisition and final-review windows. During a protected window, package installation is deferred and needrestart defers service and container restarts, including dependencies that could indirectly interrupt collection. Update checks and downloads can continue.',
+        'The maintenance policy introduced bounded protection around registered acquisition and final-review windows. During a protected window, package installation is deferred and needrestart defers service and container restarts, including dependencies that could indirectly interrupt collection. The system does not permanently disable maintenance outside protected collection windows.',
         'I did not want protection to become a permanent excuse to leave the host unpatched. The policy has finite service limits and fallback deadlines. Normal maintenance becomes eligible again after all protected windows end. An emergency exception is short-lived and requires the interruption to be acknowledged.',
         'Capture admission also checks that the installed helper matches the approved release and that protection covers acquisition plus shutdown. A missing, mismatched or insufficient policy blocks a new managed capture. The helper itself does not start or stop acquisition.'
       ] },
@@ -223,7 +223,7 @@ export const notes: Note[] = [
   },
   {
     slug: 'research-with-imperfect-market-data', number: '04',
-    title: 'Why I Stopped Waiting for a Perfect Market Dataset', category: 'Market data & research',
+    title: 'Why I Stopped Waiting for a Perfect Market Dataset', category: 'Market data & research · 6 min read',
     summary: 'A useful research sample does not have to be an uninterrupted week. It does need verified records, explicit gaps and an honest account of what has already been examined.',
     takeaway: 'Data quality means knowing which observations can be trusted and what they can support, while keeping missing data and research exposure visible.',
     sections: [
@@ -254,7 +254,7 @@ export const notes: Note[] = [
   },
   {
     slug: 'historical-market-context-timestamps', number: '05',
-    title: 'Why Historical Market Context Needs More Than One Timestamp', category: 'Backend & temporal data',
+    title: 'Why Historical Market Context Needs More Than One Timestamp', category: 'Backend & temporal data · 5 min read',
     summary: 'An event can happen before my system learns about it. Historical context must preserve that delay instead of quietly giving an earlier decision information from the future.',
     takeaway: 'Historical correctness means reconstructing the information available at the time, not selecting today’s knowledge by the date of the event.',
     sections: [
@@ -278,7 +278,7 @@ export const notes: Note[] = [
       ] },
       { title: 'Verification and limitations', paragraphs: [
         'The reviewed Trusted Context work implements durable history and historical selection. V2 qualification tested delayed information, duplicate imports, restart persistence, immutable history, publication failures and exact replay. Its evidence separates deterministic synthetic scenarios from replay of existing genuine local macroeconomic observations.',
-        'V2 was qualified as a local research slice, not a production-activated service or validated predictive model. Those tests do not establish new live-source coverage, complete historical knowledge or forecast accuracy. Reviewed source relationships also remain assertions requiring evidence, not an automated proof of independence.',
+        'The Market State V2 research slice was qualified locally; that evidence does not establish V2 production activation or predictive accuracy. The separate MCE Linux collection service has its own operational evidence. Those tests do not establish new live-source coverage, complete historical knowledge or forecast accuracy. Reviewed source relationships also remain assertions requiring evidence, not an automated proof of independence.',
         'My practical lesson is to ask when a record became usable before asking what it explains. A historical view is only credible if later knowledge stays out. Evidence basis: private Trusted Context architecture and runtime documentation, plus Market State V2 design and qualification reports; no private implementation artifacts are reproduced.'
       ] }
     ]
