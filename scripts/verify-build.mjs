@@ -12,7 +12,7 @@ async function files(directory) {
 }
 const allFiles = await files(root);
 const htmlFiles = allFiles.filter((file) => file.endsWith('.html'));
-assert.equal(htmlFiles.length, 13, 'Expected 12 public routes and the static 404 page');
+assert.equal(htmlFiles.length, 16, 'Expected 15 public routes and the static 404 page');
 const titles = new Set();
 let links = 0;
 let maximumPageBytes = 0;
@@ -52,7 +52,7 @@ assert.ok(maximumPageBytes < 18_000, 'HTML gzip budget: 18 KB');
 const cssBytes = (await Promise.all(allFiles.filter((file) => file.endsWith('.css')).map(async (file) => gzipSync(await readFile(file)).byteLength))).reduce((sum, size) => sum + size, 0);
 assert.ok(cssBytes < 12_000, 'CSS gzip budget: 12 KB');
 const sitemap = await readFile(join(root, 'sitemap.xml'), 'utf8');
-assert.equal((sitemap.match(/<loc>/g) ?? []).length, 12);
+assert.equal((sitemap.match(/<loc>/g) ?? []).length, 15);
 assert.match(await readFile(join(root, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/portfolio\.tcx086\.com\/sitemap\.xml/);
 assert.ok(!allFiles.some((file) => file.endsWith('_worker.js')), 'No server runtime');
 assert.ok((await stat(join(root, 'og.png'))).size > 1000, 'Raster Open Graph image exists');
@@ -84,4 +84,4 @@ assert.equal(resume.projects.length, 6, 'Full resume includes all six v4.4 proje
 assert.equal(resumeArtifacts.fullPages, 3);
 assert.ok(resumeHtml.indexOf('href="/tom-chen-master-resume-public.pdf"') < resumeHtml.indexOf('href="/tom-chen-resume.pdf"'), 'Full resume is the primary download');
 for (const [email] of resumeTxt.matchAll(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi)) assert.equal(email, resume.email);
-console.log(JSON.stringify({ routes: 12, htmlFiles: htmlFiles.length, internalLinksChecked: links, maximumHtmlGzipBytes: maximumPageBytes, totalCssGzipBytes: cssBytes, privacyScan: 'passed; public snapshot allowlist verified', resumeConsistency: 'HTML/TXT facts and both generated PDF hashes verified', runtime: 'static; one isolated read-only monitor module on the collector page' }, null, 2));
+console.log(JSON.stringify({ routes: 15, htmlFiles: htmlFiles.length, internalLinksChecked: links, maximumHtmlGzipBytes: maximumPageBytes, totalCssGzipBytes: cssBytes, privacyScan: 'passed; public snapshot allowlist verified', resumeConsistency: 'HTML/TXT facts and both generated PDF hashes verified', runtime: 'static; one isolated read-only monitor module on the collector page' }, null, 2));

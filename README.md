@@ -21,7 +21,7 @@ npm run preview -- --port 4173
 npm run test:browser
 ```
 
-The browser suite checks all 12 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, full/concise PDF and TXT downloads, native expandable technical sections and basic resource budgets. Public-monitor checks cover active-format test fixtures, refresh, delayed observations, HTTP failure, rejected private fields and JavaScript-disabled fallback. Reduced-motion checks save both architecture and source-landscape screenshots. `PORTFOLIO_BASE_URL` runs the suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification. Restart the preview server after rebuilding to reload its asset manifest.
+The browser suite checks all 15 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, full/concise PDF and TXT downloads, native expandable technical sections and basic resource budgets. Public-monitor checks cover active-format test fixtures, refresh, delayed observations, HTTP failure, rejected private fields and JavaScript-disabled fallback. Reduced-motion checks save both architecture and source-landscape screenshots. `PORTFOLIO_BASE_URL` runs the suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification. Restart the preview server after rebuilding to reload its asset manifest.
 
 ## Architecture
 
