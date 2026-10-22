@@ -187,13 +187,108 @@ export const notes: Note[] = [
       ] },
       { title: 'Evidence basis', paragraphs: ['Based on the private project’s operational Level-2 source-continuity documentation and September 2026 temporal-burst investigation. No raw market data, private source code, network endpoints or operational configuration is reproduced.'] }
     ]
+  },
+  {
+    slug: 'ubuntu-update-stopped-market-data-collector', number: '03',
+    title: 'The Ubuntu Update That Stopped My Market Data Collector', category: 'Systems reliability · 5 min read',
+    summary: 'An unattended Ubuntu update restarted acquisition services during a live campaign. The interruption exposed a gap between application safeguards and host maintenance.',
+    takeaway: 'Operational reliability depends on coordinating application and host lifecycle behavior. Protect a bounded collection window, then let normal maintenance resume.',
+    sections: [
+      { title: 'An update became a collection failure', paragraphs: [
+        'I wanted the dedicated Linux host to collect market data without routine workstation interruptions. On 21 October 2026, an unattended Ubuntu update interrupted an active campaign instead. The package-maintenance path invoked needrestart, which can restart services after their software dependencies change.',
+        'The incident record showed restart requests for Factory acquisition services. The restarted campaign then refused to continue the interrupted acquisition. That refusal was correct: starting a process again could not turn the missing interval into a continuous recording. I needed to fix the maintenance interaction without weakening that safety contract.'
+      ] },
+      { title: 'Following the restart beyond the application', paragraphs: [
+        'The investigation connected the package-maintenance activity to the service restarts and checked what remained running. MCE, the separate Market Context Engine application, was still active in the reviewed incident record. This was not evidence that every service on the host had failed.',
+        'Historical certification evidence was retained. A failed or uncertified run stayed failed or uncertified, even where explicit recovery could finish permitted work on already captured data. Restarting acquisition was not allowed to erase the original interruption or extend its deadline.'
+      ] },
+      { title: 'A finite window for collection', paragraphs: [
+        'The maintenance policy introduced bounded protection around registered acquisition and final-review windows. During a protected window, package installation is deferred and needrestart defers service and container restarts, including dependencies that could indirectly interrupt collection. The system does not permanently disable maintenance outside protected collection windows.',
+        'I did not want protection to become a permanent excuse to leave the host unpatched. The policy has finite service limits and fallback deadlines. Normal maintenance becomes eligible again after all protected windows end. An emergency exception is short-lived and requires the interruption to be acknowledged.',
+        'Capture admission also checks that the installed helper matches the approved release and that protection covers acquisition plus shutdown. A missing, mismatched or insufficient policy blocks a new managed capture. The helper itself does not start or stop acquisition.'
+      ] },
+      { title: 'A separate compatibility problem', paragraphs: [
+        'Later, Factory and MCE shared a maintenance entrypoint whose installed implementation had been extended independently. Factory rejected it because its bytes differed from the pinned release. This was a compatibility and admission problem, separate from the update incident.',
+        'The compatibility fix brought the bounded MCE lease consumer into the canonical maintenance source, verified its bytes before execution and included it in installation and rollback. Factory kept its exact-source checks; the two applications kept independent protection windows. Accepting an unknown helper would have hidden the mismatch rather than resolved it.'
+      ] },
+      { title: 'Verification and remaining limitations', paragraphs: [
+        'The reviewed fixes passed focused policy, admission, rollback and compatibility checks. Ubuntu fixtures exercised package-manager integration with a fake package installer, needrestart configuration parsing and synthetic system services. Separate acquisition-recovery tests preserved native certification and historical failures.',
+        'These were scoped software checks, not a zero-downtime maintenance demonstration. The reviewed integration did not establish a successful live upgrade, reboot or production rollback, nor a completed long-duration campaign. Already admitted maintenance and explicit privileged bypasses remain outside protection.'
+      ] },
+      { title: 'What I now check', paragraphs: [
+        'I now treat host maintenance as part of the collection lifecycle: what can interrupt a run, when deferred patches can proceed and which evidence must survive. Application safeguards did their job by refusing false continuity. Host policy needed to respect the same boundary.',
+        'Evidence basis: the private Factory maintenance incident account, bounded-maintenance documentation and merged maintenance, recovery and compatibility reviews. This is an original public explanation; private logs and host configuration are omitted.'
+      ] }
+    ]
+  },
+  {
+    slug: 'research-with-imperfect-market-data', number: '04',
+    title: 'Why I Stopped Waiting for a Perfect Market Dataset', category: 'Market data & research · 6 min read',
+    summary: 'A useful research sample does not have to be an uninterrupted week. It does need verified records, explicit gaps and an honest account of what has already been examined.',
+    takeaway: 'Data quality means knowing which observations can be trusted and what they can support, while keeping missing data and research exposure visible.',
+    sections: [
+      { title: 'The dataset I kept trying to finish', paragraphs: [
+        'My collection work included attempts at uninterrupted 24-hour and seven-day acquisition. Those targets exposed useful infrastructure problems, but they also risked making every research question wait for the next reliability campaign. I needed a way to study the verified data already available without declaring the whole recording complete.',
+        'Three things had to stay separate. Process uptime says the collector was running. Durable records say observations reached storage. Certified coverage says a particular data product and interval passed its native integrity and continuity checks. None of those statements automatically establishes the other two.'
+      ] },
+      { title: 'Use verified hours without inventing the gaps', paragraphs: [
+        'The research reader selects native PASS product-hours: hour-sized units for a specific exchange, instrument and data product that satisfy the existing certification rules. It verifies the original certificates and sealed inputs on read-only replicas, including file identities before use. It does not relax certification to admit an old failed capture.',
+        'For a study requiring several products together, only their shared eligible coverage can be used. Independent instruments can be studied separately. Uncertified intervals and unavailable dependencies remain exclusions, with reasons. A missing stretch of trades cannot be interpolated into a supposedly factual market history.',
+        'Recovery epochs mark new continuity segments after an interruption. Feature windows and later outcomes must not cross gaps, recovery boundaries or chronological sample splits. The study leaves space around those boundaries and warms up features again afterward. Information unavailable at the decision cutoff stays unavailable.'
+      ] },
+      { title: 'A concrete exploratory study', paragraphs: [
+        'The real-data order-flow imbalance study used 459 native PASS Trade product-hours and processed 19,214,835 factual trades. Product-hours are summed across selected trade streams; they do not mean 459 uninterrupted hours on one instrument. These are research-input counts, not a whole-campaign PASS claim.',
+        'Here, order-flow imbalance compares buyer- and seller-initiated trade volume over a short window. The study asked how that measurement related to subsequent price changes. It used trade tapes, so unavailable order-book spread stayed missing. Stale prices and unknown inputs also remained missing rather than receiving convenient substitutes.',
+        'Only after defining that question does a statistic help. Rank correlation, often called an information coefficient or IC, describes whether larger feature values tend to accompany larger later returns. It does not establish a causal mechanism or show that a strategy would survive trading costs.'
+      ] },
+      { title: 'Reproducibility is not a fresh test', paragraphs: [
+        'The recorded checks compared selected feature and outcome calculations with independent native replay and checked every evaluation against gap, split and information-time boundaries. Those checks support the calculation and selection behavior. They do not make the sample representative of every market condition.',
+        'The experiment log also retained prior exposure. Before the initial run, 416 source certificates had already been viewed; all 459 were exposed afterward. A later plumbing rerun explicitly recorded holdout reuse. Reproducing the output was useful for engineering verification, but it did not create new evidence about unseen markets.'
+      ] },
+      { title: 'Limitations and the next useful question', paragraphs: [
+        'The study remains EXPLORATORY. A holdout is data reserved for evaluation; once examined or reused, it cannot be treated as a clean independent test. This work has no clean forward out-of-sample (OOS) validation and establishes no proven trading alpha or profitability.',
+        'I can use this smaller verified sample to examine whether a method deserves a genuinely fresh test while infrastructure work continues. Missingness, source recovery and prior exposure all constrain that decision. Waiting longer is useful only if it improves the evidence needed for the next question.',
+        'Evidence basis: the private Factory continuous-acquisition and gap-aware research reviews, native PASS reader and recorded real-data OFI reports. Financial result tables and raw observations are not reproduced.'
+      ] }
+    ]
+  },
+  {
+    slug: 'historical-market-context-timestamps', number: '05',
+    title: 'Why Historical Market Context Needs More Than One Timestamp', category: 'Backend & temporal data · 5 min read',
+    summary: 'An event can happen before my system learns about it. Historical context must preserve that delay instead of quietly giving an earlier decision information from the future.',
+    takeaway: 'Historical correctness means reconstructing the information available at the time, not selecting today’s knowledge by the date of the event.',
+    sections: [
+      { title: 'The three-minute mistake', paragraphs: [
+        'Suppose an event occurs at 10:00, but my system receives the report at 10:03. A historical query for 10:01 must exclude it. Sorting records by event time alone would put the report into the earlier view, making a decision appear better informed than it could have been.',
+        'I want Market Context Engine to help me inspect what was known around a market event. That requires preserving the system’s own information history alongside the events it describes. A timestamp on a headline is not enough.'
+      ] },
+      { title: 'Separate occurrence, receipt and availability', paragraphs: [
+        'Source or event time describes when something happened or when its publisher says it was released. Received time records when the system first obtained it. Available time records when the relevant observation or published state became usable under its storage and publication contract. Those clocks answer different questions.',
+        'Receipt alone does not prove durable availability. A write can be delayed or fail. The implemented context contracts retain availability evidence, and the later Market State V2 publication path uses a receipt after commit to expose a complete state. A snapshot without that publication receipt stays invisible to historical readers.',
+        'Unknown source publication time remains unknown. Retrieving an old document today cannot make it evidence that my system possessed yesterday. If another research system consumes an export later, its actual receipt is a further boundary; export availability alone does not establish that consumer’s earlier knowledge.'
+      ] },
+      { title: 'Keep observations, select the historical view', paragraphs: [
+        'Trusted Context stores append-only observations and preserves frozen pre-event expectations separately from later actuals. An as-of query applies an explicit historical cutoff to eligible records. It must not silently replace the earlier view with a newer fact or a later expectation.',
+        'Later checkpoints append observations rather than overwrite history. Explicit revision metadata is retained; a changed number alone does not prove an official revision. This matters when the first captured value was itself delayed: it cannot automatically be described as the original release vintage.',
+        'Market State V2 extends the approach with immutable snapshots and frozen input manifests that identify the evidence and policy used. Exact replay can then check the same inputs and historical boundaries, rather than rerun today’s collection and assume it reconstructs yesterday.'
+      ] },
+      { title: 'Repeated reports and absent sources', paragraphs: [
+        'Three websites repeating one announcement are not three independent confirmations. The implemented provenance model groups known common origins and reposts. Additional independence requires explicit reviewed evidence; different domains alone do not establish it. Unqualified independence remains unknown.',
+        'An official source can also be delayed or unavailable. The system retains that limitation instead of inventing a release, expectation or actual. In the tested V2 outage behavior, affected context becomes stale while its retained condition and establishment time remain inspectable. Missing current support does not erase what was previously recorded.'
+      ] },
+      { title: 'Verification and limitations', paragraphs: [
+        'The reviewed Trusted Context work implements durable history and historical selection. V2 qualification tested delayed information, duplicate imports, restart persistence, immutable history, publication failures and exact replay. Its evidence separates deterministic synthetic scenarios from replay of existing genuine local macroeconomic observations.',
+        'The Market State V2 research slice was qualified locally; that evidence does not establish V2 production activation or predictive accuracy. The separate MCE Linux collection service has its own operational evidence. Those tests do not establish new live-source coverage, complete historical knowledge or forecast accuracy. Reviewed source relationships also remain assertions requiring evidence, not an automated proof of independence.',
+        'My practical lesson is to ask when a record became usable before asking what it explains. A historical view is only credible if later knowledge stays out. Evidence basis: private Trusted Context architecture and runtime documentation, plus Market State V2 design and qualification reports; no private implementation artifacts are reproduced.'
+      ] }
+    ]
   }
 ];
 
 export const pageMeta: Record<string, { title: string; description: string }> = {
   '/': { title: site.title, description: site.description },
   '/projects/': { title: 'Selected engineering projects', description: 'What Tom Chen built, why he built it and the engineering behind the results.' },
-  '/notes/': { title: 'Engineering notes', description: 'Technical notes on collector reliability, WebSocket continuity and evidence-driven failure investigation.' },
+  '/notes/': { title: 'Engineering notes', description: 'Field notes on collector reliability, gap-aware market research and historically correct market context.' },
   '/about/': { title: 'About Tom', description: 'Tom Chen, University of Toronto Mississauga BCom graduate and contract part-time Backend & Data Engineer at Lomidance.' },
   '/resume/': { title: 'Resume & Experience', description: 'Tom Chen’s full professional background and concise engineering resume, covering backend work, data systems, financial research and analytical projects.' },
   '/contact/': { title: 'Get in touch', description: 'Contact Tom Chen about backend, data, market systems and AI integration engineering roles.' }

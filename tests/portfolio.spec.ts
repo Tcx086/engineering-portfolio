@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const routes = ['/', '/projects/', '/notes/', '/about/', '/resume/', '/contact/', '/projects/microstructure-discovery-factory/', '/projects/market-context-engine/', '/projects/lomidance/', '/projects/portfolio-optimization/', '/notes/dedicated-linux-market-data-collector/', '/notes/websocket-reconnection-data-completeness/'];
+const routes = ['/', '/projects/', '/notes/', '/about/', '/resume/', '/contact/', '/projects/microstructure-discovery-factory/', '/projects/market-context-engine/', '/projects/lomidance/', '/projects/portfolio-optimization/', '/notes/dedicated-linux-market-data-collector/', '/notes/websocket-reconnection-data-completeness/', '/notes/ubuntu-update-stopped-market-data-collector/', '/notes/research-with-imperfect-market-data/', '/notes/historical-market-context-timestamps/'];
 for (const route of routes) {
   test(`${route} renders without overflow or accessibility violations`, async ({ page }) => {
     const errors: string[] = [];
