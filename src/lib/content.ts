@@ -128,10 +128,11 @@ export const projects: Project[] = [
   }
 ];
 
-export type Note = { slug: string; number: string; title: string; category: string; summary: string; takeaway: string; sections: Section[] };
+export type Note = { slug: string; number: string; title: string; category: string; summary: string; takeaway: string; relatedProject: string; sections: Section[] };
 export const notes: Note[] = [
   {
     slug: 'dedicated-linux-market-data-collector', number: '01',
+    relatedProject: '/projects/microstructure-discovery-factory/',
     title: 'Building a Dedicated Linux Market Data Collector', category: 'Systems reliability · 6 min read',
     summary: 'Stopping a collector at the wrong moment can interrupt storage or leave background workers running. A dedicated Linux service needs to handle shutdown as carefully as collection.',
     takeaway: 'Stop new inputs first, let storage finish within a deadline, and preserve a failed run for recovery when shutdown cannot complete cleanly.',
@@ -161,6 +162,7 @@ export const notes: Note[] = [
   },
   {
     slug: 'websocket-reconnection-data-completeness', number: '02',
+    relatedProject: '/projects/microstructure-discovery-factory/',
     title: 'Why WebSocket Reconnection Does Not Guarantee Data Completeness', category: 'Market data engineering · 5 min read',
     summary: 'A connection can reopen while the local order book still lacks updates from the interruption. Research can reach the wrong conclusion if that interval is treated as complete.',
     takeaway: 'Track connection health, data continuity and confirmed storage separately. A fresh snapshot starts a valid interval; it does not recreate the gap.',
@@ -190,6 +192,7 @@ export const notes: Note[] = [
   },
   {
     slug: 'ubuntu-update-stopped-market-data-collector', number: '03',
+    relatedProject: '/projects/microstructure-discovery-factory/',
     title: 'The Ubuntu Update That Stopped My Market Data Collector', category: 'Systems reliability',
     summary: 'An unattended Ubuntu update restarted acquisition services during a live campaign. The interruption exposed a gap between application safeguards and host maintenance.',
     takeaway: 'Operational reliability depends on coordinating application and host lifecycle behavior. Protect a bounded collection window, then let normal maintenance resume.',
@@ -223,6 +226,7 @@ export const notes: Note[] = [
   },
   {
     slug: 'research-with-imperfect-market-data', number: '04',
+    relatedProject: '/projects/microstructure-discovery-factory/',
     title: 'Why I Stopped Waiting for a Perfect Market Dataset', category: 'Market data & research',
     summary: 'A useful research sample does not have to be an uninterrupted week. It does need verified records, explicit gaps and an honest account of what has already been examined.',
     takeaway: 'Data quality means knowing which observations can be trusted and what they can support, while keeping missing data and research exposure visible.',
@@ -254,6 +258,7 @@ export const notes: Note[] = [
   },
   {
     slug: 'historical-market-context-timestamps', number: '05',
+    relatedProject: '/projects/market-context-engine/',
     title: 'Why Historical Market Context Needs More Than One Timestamp', category: 'Backend & temporal data',
     summary: 'An event can happen before my system learns about it. Historical context must preserve that delay instead of quietly giving an earlier decision information from the future.',
     takeaway: 'Historical correctness means reconstructing the information available at the time, not selecting today’s knowledge by the date of the event.',
@@ -282,13 +287,129 @@ export const notes: Note[] = [
         'My practical lesson is to ask when a record became usable before asking what it explains. A historical view is only credible if later knowledge stays out. Evidence basis: private Trusted Context architecture and runtime documentation, plus Market State V2 design and qualification reports; no private implementation artifacts are reproduced.'
       ] }
     ]
+  },
+  {
+    slug: 'volatility-prediction-is-not-trading-alpha', number: '06',
+    relatedProject: '/projects/microstructure-discovery-factory/',
+    title: 'Predicting Volatility Is Not the Same as Finding Trading Alpha', category: 'Research systems & validation',
+    summary: 'My latest multivariate experiments predicted market activity more convincingly than price direction. Keeping those targets separate changed what I could reasonably promote to a future test.',
+    takeaway: 'Compare models on the same eligible observations, preserve every attempted configuration, and separate a useful risk forecast from an executable trading advantage.',
+    sections: [
+      { title: 'Three targets, three different claims', paragraphs: [
+        'On 4 November 2026, I completed two bounded research iterations using previously examined Factory data. I evaluated future returns, realized volatility and quoted spread separately. A model that anticipates a busy market does not necessarily know which direction the price will move, or whether a trade can cover its costs.',
+        'The first iteration compared simple baselines with fixed ridge models using market, positioning and regime inputs. The second examined volatility persistence, conditional reversal and cross-market relationships, alongside statistical and pretrained-model rivals. Neither iteration found qualified tradable alpha.'
+      ] },
+      { title: 'Make the comparison fair before making it bigger', paragraphs: [
+        'Each comparison used identical eligible decision rows. Training transformations and thresholds used training data only; training outcomes had to mature before the chronological boundary. Feature warmups and future outcomes could not cross missing intervals or collection-run changes.',
+        'Optional positioning inputs retained missing indicators rather than becoming invented observations. Required features and targets were not imputed. Configurations with insufficient chronological support stayed in the trial accounting instead of disappearing from the denominator. These are experiment-runner responsibilities, not details to repair after choosing a winner.'
+      ] },
+      { title: 'A risk result survived better than a return story', paragraphs: [
+        'The reviewed results showed more consistent volatility prediction than directional prediction. In the second iteration, the core volatility model beat an exponentially weighted variance baseline in 13 of 20 lane/horizon comparisons, while its return R-squared was negative in every corresponding cell. Those cells share dates and market shocks; they are not 20 independent experiments.',
+        'A feature-shuffle control also beat the volatility baseline in 12 of 20 cells. That weakened the claim that the extra market features identified a special mechanism. Conditional price reversals and cross-venue convergence likewise needed a separate economic check: frequent reversal or convergence did not imply enough gross movement to cover the stated execution-cost scenarios.'
+      ] },
+      { title: 'Reproduce calculations without creating a new holdout', paragraphs: [
+        'Verification recomputed sampled labels, checked training-maturity cutoffs and replayed saved forecasts from fitted coefficients. The research retained input identities, attempt history, corrections and negative results. Those checks establish computational behavior; they do not create new market evidence.',
+        'Registering rules before this calculation still meant reanalyzing exposed history. Replaying the same sample, expanding the model family or correcting a checker did not make it a fresh out-of-sample test. The existing frozen prospective risk probe remained unchanged.'
+      ] },
+      { title: 'Limitations and the next decision', paragraphs: [
+        'The second iteration had at most nine validation dates and five adjacent-day inference blocks. No contrast passed its conservative familywide adjustment. Historical selection, correlated samples, assumed execution costs and unknown pretrained-model training overlap limit interpretation.',
+        'I kept the outcome as exploratory research: a candidate risk forecast deserves a future frozen comparison, while unsupported trading candidates should stop consuming tuning effort on the same history. Evidence basis: the completed Pure Quant V1 and V2 reports and their verification summaries. Raw data, model weights and private experiment artifacts are not included here.'
+      ] }
+    ]
+  },
+  {
+    slug: 'credit-indicators-source-semantics', number: '07',
+    relatedProject: '/projects/market-context-engine/',
+    title: 'A Working Data Source Can Still Measure the Wrong Thing', category: 'Data integration & source semantics',
+    summary: 'Adding official credit surveys to Market Context Engine filled useful regional context. It also required keeping quarterly lending conditions separate from daily bond-market spreads.',
+    takeaway: 'A successful fetch proves transport. A usable indicator also needs the right definition, units, reference period, freshness policy and interpretation.',
+    sections: [
+      { title: 'The tempting shortcut: fill the empty credit tile', paragraphs: [
+        'I wanted more regional credit context in Market Context Engine. Some desired daily market-spread sources were unavailable. Official surveys from the European Central Bank, Bank of Canada and Bank of Japan provided accessible evidence about lending conditions, but they did not measure the missing bond spreads.',
+        'Replacing a source while retaining its old label and thresholds would have produced a functioning dashboard with a misleading interpretation. The integration therefore added explicitly labelled survey alternatives and kept the existing US daily corporate spread separate.'
+      ] },
+      { title: 'Put the definition into the calculation', paragraphs: [
+        'The ECB and Canadian survey calculations evaluate net tightening with an explicit research band. The Japanese lending-attitude diffusion index uses the change between consecutive observations with the sign reversed: easier lending attitudes and tighter lending conditions point in opposite directions.',
+        'Reference periods also differ from publication dates. The ECB survey round maps to the actual prior reference quarter. Source-specific quarterly freshness rules prevent an old observation from looking current just because a daily job successfully retrieved it again. The interface exposes units, periods and the calculation trace.'
+      ] },
+      { title: 'Missing, neutral and incomparable need different states', paragraphs: [
+        'A failed or stale source is not the same as an available value below the directional threshold. Both differ from mixed regional evidence. Preserving those states lets a reader distinguish no evidence from evidence that does not support a directional call.',
+        'I also left global credit intentionally unaggregated. Daily market pricing and quarterly bank surveys cannot become one comparable global verdict merely because the dashboard can display them together. An alternative ETF spread candidate stayed disabled because its definition and transport were not qualified as a replacement.'
+      ] },
+      { title: 'Verify the boundary from capture to display', paragraphs: [
+        'The integration used the existing bounded supplemental collection path, with cached attempts and current observations rather than full-history downloads. Before switching the read-only display, deployment required successful captures and verified that protected acquisition service identities and states stayed unchanged.',
+        'The reviewed change records 102 Python and frontend tests, type checking and a production build. New-source calculation cases used synthetic fixtures; separate live checks verified captures reaching the API and desktop/mobile presentation. Keeping those evidence types distinct avoids treating a fixture as proof of a successful live source.'
+      ] },
+      { title: 'Limitations and the engineering lesson', paragraphs: [
+        'Quarterly surveys are delayed and answer different questions from daily spreads. The directional bands are research rules, not calibrated predictive thresholds. This integration improves inspectable context; it does not demonstrate forecast accuracy or eliminate the original market-spread coverage gap.',
+        'Evidence basis: the merged official credit-survey integration, its calculation rules, deployment report and recorded verification. This summary omits private endpoints and operational configuration. The useful result is a more honest indicator, not a fuller-looking grid.'
+      ] }
+    ]
+  },
+  {
+    slug: 'voice-latency-audio-readiness', number: '08',
+    relatedProject: 'https://github.com/Tcx086/fat-fish-discord-community',
+    title: 'The Voice Playback Gap That Started Before Playback', category: 'AI integration & latency debugging',
+    summary: 'A long pause between spoken sentences looked like a playback problem. Reconstructing the timeline showed that most of the delay came from waiting for the next sentence’s synthesized audio.',
+    takeaway: 'Measure request admission, audio readiness, media preparation and playback separately. Fix the demonstrated ordering defect without claiming a speedup the measurements do not show.',
+    sections: [
+      { title: 'Start with the sentence that was needed next', paragraphs: [
+        'In Fat Fish Discord, I investigated an archived local replay with an approximately 1.21-second gap between sentences. Playback order was correct. About 1,160 milliseconds were spent awaiting the next TTS response, followed by roughly 48 milliseconds of media preparation.',
+        'The later sentence had completed synthesis before the sentence needed next. Correct playback ordering concealed a different problem: concurrently invoked HTTP requests did not provide a guarantee that the serial synthesis worker would admit them in sentence order.'
+      ] },
+      { title: 'Instrument the boundary you can actually observe', paragraphs: [
+        'I separated client queue admission, response headers, complete audio-body availability, encoded-resource readiness and player transitions. A returned stream handle did not establish that the whole audio response was ready. Reported synthesis duration was also different from end-to-end request time.',
+        'The resident service did not expose exact server admission and lock-wait timestamps. Client observations supported an ordering inversion, but could not assign the entire delay to a precise internal queue or GPU stage. I retained that uncertainty rather than subtracting unrelated clocks into an apparently exact explanation.'
+      ] },
+      { title: 'Preserve prefetch, order dispatch', paragraphs: [
+        'The small repair reused the existing cancellation-aware FIFO limiter for the Feiyu provider. It allowed one dispatch at a time until the previous response returned headers. For this buffered adapter, those headers mean the complete server WAV already exists; that assumption is specific to this provider.',
+        'Synthesis could still overlap playback, and existing prefetch bounds remained in place. Cancellation and failures had to release the client slot, queued cancelled jobs could not dispatch, and stale active results could not reach playback. The limiter is local to one client instance; the server still owns its inference lock.'
+      ] },
+      { title: 'A deterministic fix is not an observed median speedup', paragraphs: [
+        'A controlled synthetic worker reproduced the admission reversal. The first inter-sentence gap changed from 1,300 to 40 virtual milliseconds while preserving sentence order and synthesis/playback overlap. Those are simulated timings, not measured hardware performance.',
+        'Forty fresh local replays also completed, but the original code did not reproduce the rare inversion in those trials. Ordinary bounded-prefetch gap medians were 51.0 milliseconds before and 52.2 after; the measurements demonstrated no ordinary-gap improvement. The prepared pull request recorded 73 focused Node tests and two fake-worker tests passing.'
+      ] },
+      { title: 'Limitations and the lesson for latency work', paragraphs: [
+        'These measurements used local synthesis and media code without live Discord transport. They do not establish client-audible improvement, an exact server queue delay or faster model inference. The reviewed FIFO change was proposed in a pull request; these results do not establish a production rollout.',
+        'Evidence basis: the archived voice-latency profile, scheduling investigation and FIFO pull-request verification. Participant text, recordings and private service configuration are excluded. The practical result was a reproducible ordering guarantee and a clearer explanation of where waiting occurred.'
+      ] }
+    ]
+  },
+  {
+    slug: 'collector-recovery-without-root-cause', number: '09',
+    relatedProject: '/projects/microstructure-discovery-factory/',
+    title: 'Recovering a Collector Without Pretending the Root Cause Is Solved', category: 'Incident investigation & recovery',
+    summary: 'A host incident stopped Factory, MCE and a new research collector. Recovery succeeded, but the evidence supported only part of the kernel-blocking explanation.',
+    takeaway: 'Separate the observed shutdown chain, the mechanism seen in diagnostics, and the unknown initiating cause. Recovery verification cannot stand in for recurrence prevention.',
+    sections: [
+      { title: 'Successful work did not mean the service had finished', paragraphs: [
+        'On 4 November 2026, an MCE storage job reported successful work and archive verification, but its service failed to finish within the existing timeout. The guard stopped MCE, Factory lost its maintenance protection, and the independent Deribit research collector later stopped after detecting unhealthy protection.',
+        'That established a shutdown chain. It did not establish why service termination stalled, or whether the new deployment had any indirect effect. A successful application message and a completed service lifecycle were different observations.'
+      ] },
+      { title: 'An observed wait path is only part of a root cause', paragraphs: [
+        'Later kernel logs showed unrelated exiting processes blocked during procfs teardown while waiting for the global inode writeback-switch queue. The follow-up investigation compared the matching Ubuntu kernel source with those stacks and found a corresponding global wait path.',
+        'Earlier writeback warnings predated the deployment, providing useful context without proving the trigger. The investigation lacked the contemporaneous stack of the worker delaying completion, and the original storage process had not been captured with a kernel stack. Linking its earlier timeout to the later observed wait remained an inference.'
+      ] },
+      { title: 'Restore service while preserving the failed interval', paragraphs: [
+        'After explicit authorization to recover acquisition, the work retained the prior campaign, immutable records, stop evidence and collection gap. Factory resumed under a new recovery campaign rather than converting the interrupted run into a success.',
+        'Recovery checked advancing durable-write acknowledgements, fresh source and persistence times, MCE guard state and native storage verification. A separate compatibility repair restored the Deribit collector. The record includes a 30-minute Factory baseline and subsequent activation checks; it does not claim an uninterrupted collection history.'
+      ] },
+      { title: 'Check the proposed cure against the actual mechanism', paragraphs: [
+        'The installed but inactive newer kernel still contained the global wait path examined in the investigation. That made “reboot into the new kernel” an unproven cure. The follow-up did not reboot the host, relax timeouts or bypass safety checks to manufacture a healthy status.',
+        'The final read-only checks observed healthy acquisition and unchanged process identities during that verification window. That is evidence about recovery at the observed times. It cannot show that the initiating condition has been removed.'
+      ] },
+      { title: 'Limitations and what remains unresolved', paragraphs: [
+        'The initiating kernel-stall cause remained unknown. Missing worker stacks prevented identification of the original workload or lock, and the absence of a repeated stall during recovery did not prove prevention. A future incident would need contemporaneous blocked-task and worker evidence before the wait clears.',
+        'Evidence basis: the Deribit deployment report, preserved recovery summary and read-only kernel follow-up. This is a sanitized incident account; private logs, machine identities and access paths are omitted. Restoring acquisition was a completed task. Establishing recurrence prevention was not.'
+      ] }
+    ]
   }
 ];
 
 export const pageMeta: Record<string, { title: string; description: string }> = {
   '/': { title: site.title, description: site.description },
   '/projects/': { title: 'Selected engineering projects', description: 'What Tom Chen built, why he built it and the engineering behind the results.' },
-  '/notes/': { title: 'Engineering notes', description: 'Field notes on collector reliability, gap-aware market research and historically correct market context.' },
+  '/notes/': { title: 'Engineering notes', description: 'Field notes on collector recovery, research validation, source semantics, voice latency and historical market context.' },
   '/about/': { title: 'About Tom', description: 'Tom Chen, University of Toronto Mississauga BCom graduate and contract part-time Backend & Data Engineer at Lomidance.' },
   '/resume/': { title: 'Resume & Experience', description: 'Tom Chen’s full professional background and concise engineering resume, covering backend work, data systems, financial research and analytical projects.' },
   '/contact/': { title: 'Get in touch', description: 'Contact Tom Chen about backend, data, market systems and AI integration engineering roles.' }

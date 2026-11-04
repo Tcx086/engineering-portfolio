@@ -21,7 +21,7 @@ npm run preview -- --port 4173
 npm run test:browser
 ```
 
-The browser suite checks all 15 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, full/concise PDF and TXT downloads, native expandable technical sections and basic resource budgets. Public-monitor checks cover active-format test fixtures, refresh, delayed observations, HTTP failure, rejected private fields and JavaScript-disabled fallback. Reduced-motion checks save both architecture and source-landscape screenshots. `PORTFOLIO_BASE_URL` runs the suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification. Restart the preview server after rebuilding to reload its asset manifest.
+The browser suite checks all 19 routes at desktop and mobile sizes with axe WCAG A/AA checks, overflow checks, keyboard navigation, full/concise PDF and TXT downloads, native expandable technical sections and basic resource budgets. Public-monitor checks cover active-format test fixtures, refresh, delayed observations, HTTP failure, rejected private fields and JavaScript-disabled fallback. Reduced-motion checks save both architecture and source-landscape screenshots. `PORTFOLIO_BASE_URL` runs the suite against a deployment. Automated accessibility checks supplement human visual/keyboard review; they are not a conformance certification. Restart the preview server after rebuilding to reload its asset manifest.
 
 ## Architecture
 
@@ -68,6 +68,7 @@ Content is based on the approved owner brief, reviewed private engineering docum
 - FOMC capture counts describe **one documented event capture**, not general completeness, uptime or a later 24-hour campaign.
 - Situation Monitor's case study omits undated totals. The full resume preserves the supplied v4.4 historical counts and parity result with explicit source-version labels; these are not claims about current totals or throughput.
 - The Linux note distinguishes a software-preparation snapshot and synthetic checks from physical-host acceptance.
+- Notes 06–09 summarize the November 4 Pure Quant reports, merged official credit-survey integration, Fat Fish FIFO investigation and collector recovery record. Historical reanalysis is exploratory; survey alternatives are not bond-spread replacements; synthetic voice timings are separate from local replay measurements; recovery does not establish the kernel incident's initiating cause. The voice note links to the public repository. Private data, logs, endpoints and machine identities are excluded.
 - Lomidance is part-time contract collaboration. No commercial source, proprietary architecture or internal operational artifacts are included.
 - Resume facts were checked against the actual owner-supplied `Tom_Chen_Master_Resume_v4_4.pdf`. The full public derivative includes all six quantitative/analytical projects, contracted work, volunteering, education, skills, languages and hobby. The concise version remains an unchanged one-page engineering selection. Private contact and work-authorization fields are excluded.
 - Portfolio optimization describes implemented comparisons confirmed by that source. Reproducible results are not published, and no return, alpha or method-ranking claim is made.
